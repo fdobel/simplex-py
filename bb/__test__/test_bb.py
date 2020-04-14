@@ -26,10 +26,7 @@ class Test(unittest.TestCase):
         self.m = Model(objective, constraints)
 
     def test_example1(self):
-        t = model_to_tableau(self.m).table
-        self.assertEqual(t.shape, (5, 8))
-        npt.assert_array_equal(t[0, :], np.array([2., 1., 1., 0., 0., 0., 0., 4.]))
-        npt.assert_array_equal(t[1, :], np.array([1., 2., 0., 1., 0., 0., 0., 3.]))
-        npt.assert_array_equal(t[2, :], np.array([-1.,  0.,  0.,  0.,  1.,  0.,  0.,  0.]))
-        npt.assert_array_equal(t[3, :], np.array([ 0., -1.,  0.,  0.,  0.,  1.,  0.,  0.]))
-        npt.assert_array_equal(t[4, :], np.array([-1., -1.,  0.,  0.,  0.,  0.,  1.,  0]))
+        from bb.optim import Optimization
+
+        Optimization(self.m).branch_and_bound()
+

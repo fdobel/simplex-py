@@ -10,7 +10,7 @@ def _minimal_positive_pivot(total):
         key=lambda x: x[1]
     )
 
-    if element[1] < 0:
+    if element[1] <= 0:
         raise AttributeError("pivot element error")
     return element[1], element[0]
 

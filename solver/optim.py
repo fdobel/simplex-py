@@ -35,6 +35,10 @@ def compute_new_tableau(piv_pos, old_tableau):
 
         # pivot row update
         new_tableau[piv_row_idx, :] = r
+
+        if np.all(new_tableau == old_tableau):
+            raise RuntimeError('Pivoting not successful. No change happened. This should not happen.')  # todo check this problem
+
         return new_tableau
     else:
         print('Cannot pivot on this element.')
@@ -48,8 +52,11 @@ class Optimization:
     @staticmethod
     def run_simplex(table):
         while is_not_final_tableau_r(table):
+
             piv_pos = find_pivot_from_row(table)
+
             table = compute_new_tableau(piv_pos, table)
+
         while is_not_final_tableau(table):
             piv_pos = find_pivot(table)
             table = compute_new_tableau(piv_pos, table)

@@ -15,7 +15,7 @@ def model_to_tableau(model):
         cs = model_constraint.as_smaller_than_constraint()
 
         for c in cs:
-            print(smaller_than_to_array(c))
+            # print(smaller_than_to_array(c))
             builder.add_constraint(smaller_than_to_array(c))
 
     obj = [c for c in model.objective]

@@ -47,6 +47,10 @@ class IntegerConstraint:
     def __init__(self, variable):
         self.__variable = variable
 
+    @property
+    def variable(self):
+        return self.__variable
+
     def __str__(self):
         return "I: " + self.__variable
 
