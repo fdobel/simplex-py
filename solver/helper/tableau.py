@@ -44,10 +44,23 @@ LAST_ROW_IDX = -1
 class PlainTableau:
     def __init__(self, table):
         self.__table = table
+        lr, lc = _table_rows_columns(table)
+        n_model_variables = lc - lr - 1
+
+        v = []
+        for i in range(n_model_variables):
+            v.append('x' + str(i + 1))
+        for i in range(lc - n_model_variables - 1):
+            v.append('s' + str(i + 1))
+        self._column_names = v
 
     @property
     def table(self):
         return self.__table
+
+    @property
+    def right_side(self):
+        return self.__table[:, -1]
 
     def convert_min(self):
         table = self.table
@@ -55,35 +68,44 @@ class PlainTableau:
         table[LAST_ROW_IDX, -1] = -1 * table[-1, -1]
         return PlainTableau(table)
 
-    def variable_name(self, table):
-        """
-        generates variable array
-        :param table:
-        :return:
-        """
-        lr, lc = _table_rows_columns(table)
-        n_model_variables = lc - lr - 1
-        v = []
-        for i in range(n_model_variables):
-            v.append('x' + str(i + 1))
-        return v
+    def column_names(self):
+        return self._column_names
 
-    def collect_result(self):
+    """
+    def variable_values(self):
+        lrows, lcols = _table_rows_columns(self.table)
+        for i in range(lcols):
+            col = self.table[:, i]
+            s = sum(col)
+            m = max(col)
+            if s == m:
+    """
+
+    def basis_indices(self):
+        base_ids = set()
+        _, lcols = _table_rows_columns(self.table)
+        for i in range(lcols - 1):
+            col = self.table[:, i]
+            if float(sum(col)) == 1.0:
+                base_ids.add(i)
+        return base_ids
+
+    def current_solution(self):
         table = self.__table
 
         lrows, lcols = _table_rows_columns(table)
         n_model_variables = lcols - lrows - 1
 
         val = {}
-        for i in range(n_model_variables):
-            col = table[:, i]
-            s = sum(col)
-            m = max(col)
-            if float(s) == float(m):
-                loc = np.where(col == m)[0][0]
-                val[self.variable_name(table)[i]] = table[loc, -1]
+        bi = self.basis_indices()
+        for i in range(lcols - 1):
+            if i in bi:
+                col = table[:, i]
+                row_idx = np.where(col == max(col))[0][0]
+                val[self._column_names[i]] = self.right_side[row_idx]
             else:
-                val[self.variable_name(table)[i]] = 0
+                val[self._column_names[i]] = 0.0
+        # print(val)
         return val
 
 

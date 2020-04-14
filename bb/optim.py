@@ -6,51 +6,7 @@ from solver.optim import Optimization as SimplexOpt
 import math
 import concurrent.futures
 
-
-class ProblemNode:
-    def __init__(self, id, problem):
-        self._id = id
-        self._problem = problem
-        self._value = None
-
-    @property
-    def problem(self):
-        return self._problem
-
-    def set_value(self, value):
-        self._value = value
-
-
-class ProblemGraph:
-
-    def __init__(self, initial_problem):
-        self._next_id = 0
-        id_ = self._next_id
-        self._problems = { id_: ProblemNode(id_, initial_problem) }
-        self._next_id += 1
-        self._edges = []
-        self.queue = [id_]
-
-    def __queue_one(self, problem):
-        ni = self._next_id
-        self._problems[ni] = ProblemNode(ni, problem)
-        self.queue.append(ni)
-        self._next_id += 1
-
-    def queue_problems(self, problems):
-        for p in problems:
-            self.__queue_one(p)
-
-    def is_finished(self):
-        return len(self.queue) <= 0
-
-    def current_problem(self):
-        next_id = self.queue[0]
-        return next_id, self._problems[next_id]
-
-    def set_problem_value(self, id_, value):
-        self._problems[id_].set_value(value)
-        self.queue.remove(id_)
+from .graph import ProblemGraph
 
 
 def generate_new_instances(model, value, solution):
@@ -63,9 +19,9 @@ def generate_new_instances(model, value, solution):
             continue
 
         var_selector = [0 for i in model.variable_names()]
-        print("restrict", var_name)
+        # print("restrict", var_name)
         var_selector[model.index_of_variable(var_name)] = 1
-        print("restrict", var_name, var_selector)
+        # print("restrict", var_name, var_selector)
         cons_lt = SmallerThanConstraint(var_selector, math.floor(var_value))
         new_model1 = model.add_constraint(cons_lt)
         # print(cons_lt, new_model1)
@@ -77,10 +33,6 @@ def generate_new_instances(model, value, solution):
         new_models = [new_model1, new_model2]
         return new_models
     return []
-
-
-def worker():
-    print("Worker")
 
 
 class Optimization:
@@ -96,12 +48,12 @@ class Optimization:
 
                 id, problem_node = graph.current_problem()
 
-                if id >= 4:
+                if id >= 20:
                     exit(0)
                 print("NEXT PROBLEM:", id)
                 tableau_problem = model_to_tableau(problem_node.problem)
-                print(problem_node.problem)
-                print(tableau_problem.table)
+                # print(problem_node.problem)
+                # print(tableau_problem.table)
 
                 def maxSimplex(prob):
                     return SimplexOpt().max(prob)

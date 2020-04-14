@@ -66,7 +66,7 @@ class Optimization:
 
         final_table = self.run_simplex(tableau.table)
 
-        val = PlainTableau(final_table).collect_result()
+        val = PlainTableau(final_table).current_solution()
 
         return val, final_table
 
