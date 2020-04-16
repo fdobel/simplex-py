@@ -20,11 +20,12 @@ def _pivot_step(piv, right_side):
         return right_side / piv
     return 0
 
+
 def _choose_piv_element_in_column(table, col_idx):
     col = table[:-1, col_idx]
     right_side = table[:-1, -1]  # last column in table
 
-    total = map(lambda pivb: _pivot_step(pivb[0], pivb[1]), zip(col, right_side))
+    total = list(map(lambda pivb: _pivot_step(pivb[0], pivb[1]), zip(col, right_side)))
 
     element, row_idx = _minimal_positive_pivot(total)
 

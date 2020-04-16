@@ -52,9 +52,7 @@ class Optimization:
     @staticmethod
     def run_simplex(table):
         while is_not_final_tableau_r(table):
-
             piv_pos = find_pivot_from_row(table)
-
             table = compute_new_tableau(piv_pos, table)
 
         while is_not_final_tableau(table):
@@ -66,7 +64,7 @@ class Optimization:
 
         final_table = self.run_simplex(tableau.table)
 
-        val = PlainTableau(final_table).current_solution()
+        val = PlainTableau(final_table, tableau.column_names()).current_solution()
 
         return val, final_table
 
