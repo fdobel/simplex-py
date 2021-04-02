@@ -1,8 +1,10 @@
 import unittest
 from solver.helper.convert import constr_string_convert, obj_string_convert
-from solver.helper.tableaus import TableauBuilder, PlainTableau
+from solver.helper.tableaus import TableauBuilder
 
 from solver.optim import Optimization
+from solver.simplex.plain_tableau import PlainTableau
+from solver.simplex.solution import VariableValues
 
 
 class Test(unittest.TestCase):
@@ -25,20 +27,20 @@ class Test(unittest.TestCase):
         t = self.t3.get()
         # print(t.table)
         res = PlainTableau(t.table).collect_result()
-        self.assertEqual({ 'x1': 0, 'x2': 0}, res)
+        self.assertEqual(VariableValues.from_dict({ 'x1': 0, 'x2': 0}), res)
 
     def test_step(self):
         t = self.t3.get()
         t2 = Optimization.do_simplex_step2(t.table)
         res = PlainTableau(t2).collect_result()
-        self.assertEqual({ 'x1': 8.0, 'x2': 0}, res)
+        self.assertEqual(VariableValues.from_dict({ 'x1': 8.0, 'x2': 0}), res)
 
     def test_step_2(self):
         t = self.t3.get()
         t2 = Optimization.do_simplex_step2(t.table)
         t3 = Optimization.do_simplex_step2(t2)
         res = PlainTableau(t3).collect_result()
-        self.assertEqual({ 'x1': 6.0, 'x2': 5.999999999999999}, res)
+        self.assertEqual(VariableValues.from_dict({ 'x1': 6.0, 'x2': 5.999999999999999}), res)
 
     def test_step_3(self):
         t = self.t3.get()
@@ -46,7 +48,7 @@ class Test(unittest.TestCase):
         t3 = Optimization.do_simplex_step2(t2)
         t4 = Optimization.do_simplex_step2(t3)
         res = PlainTableau(t4).collect_result()
-        self.assertEqual({ 'x1': 2.9999999999999996, 'x2': 12.0}, res)
+        self.assertEqual(VariableValues.from_dict({ 'x1': 2.9999999999999996, 'x2': 12.0}), res)
 
     def test_step_4(self):
         t = self.t3.get()
@@ -55,4 +57,4 @@ class Test(unittest.TestCase):
         t4 = Optimization.do_simplex_step2(t3)
         t5 = Optimization.do_simplex_step2(t4)
         res = PlainTableau(t5).collect_result()
-        self.assertEqual({ 'x1': 2.9999999999999996, 'x2': 12.0}, res)
+        self.assertEqual(VariableValues.from_dict({ 'x1': 2.9999999999999996, 'x2': 12.0}), res)

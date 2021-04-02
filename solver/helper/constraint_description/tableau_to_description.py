@@ -1,6 +1,6 @@
 from solver.helper.constraint_description.constraint import LessEqualThan
 from solver.helper.constraint_description.objective import Max, Objective
-from solver.helper.tableaus import PlainTableau
+from solver.simplex.plain_tableau import PlainTableau
 
 
 def stringify(tableau: PlainTableau):

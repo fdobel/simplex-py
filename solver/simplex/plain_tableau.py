@@ -1,4 +1,5 @@
 from solver.helper.tableau import _table_rows_columns
+from solver.simplex.solution import VariableValues
 
 LAST_ROW_IDX = -1
 
@@ -27,8 +28,8 @@ class PlainTableau:
         table[LAST_ROW_IDX, -1] = -1 * table[-1, -1]
         return PlainTableau(table)
 
-    def collect_result(self):
-        from ...simplex.get_tableau_solution import init_tableau_solution
+    def collect_result(self) -> VariableValues:
+        from solver.simplex.get_tableau_solution import init_tableau_solution
         val = init_tableau_solution(self, var_names=self.var_names)
         return val
 

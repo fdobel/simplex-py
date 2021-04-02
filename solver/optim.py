@@ -1,9 +1,10 @@
 
-from solver.helper.tableaus import PlainTableau
 from solver.pivoting.pivot import find_pivot_from_row, find_pivot
 from solver.pivoting.table_functions import is_not_final_tableau_r, is_not_final_tableau
 
 import numpy as np
+
+from solver.simplex.plain_tableau import PlainTableau
 
 
 def _round_result(val):
@@ -82,7 +83,7 @@ class Optimization:
             return table
         else:
             max_ = table[-1, -1]
-            return max_, _round_result(val)
+            return max_, _round_result(val._as_dict())
 
     @classmethod
     def min(cls, tableau: PlainTableau, output='summary'):
@@ -92,4 +93,4 @@ class Optimization:
             return table
         else:
             min_ = table[-1, -1] * -1
-            return min_, _round_result(val)
+            return min_, _round_result(val._as_dict())

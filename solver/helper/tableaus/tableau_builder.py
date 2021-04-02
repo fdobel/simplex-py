@@ -1,5 +1,5 @@
 from solver.helper.tableau import _can_add_constraint, _table_rows_columns, _can_add_objective
-from solver.helper.tableaus.plain_tableau import PlainTableau
+from solver.simplex.plain_tableau import PlainTableau
 import numpy as np
 
 
@@ -86,13 +86,12 @@ class TableauBuilder:
         n_const = len(self.constraints)
 
         number_of_slack_variables = len([c for c in self.constraints if c['add_slack_variable']])
+        # FIXME assumption here: each constraint function adds a slack variable (columns: + self.cons.)
         names_of_slack_vars = ["_s_%i" % (i+1) for i in range(number_of_slack_variables)]
 
         self._table = np.zeros((n_const + 1, self.no_vars + number_of_slack_variables + 1))
-        # FIXME assumption here: each constraint function adds a slack variable (columns: + self.cons.)
         # the table will contain one row for each constraint + 1 for the objective function
         # one column will be added for the right side
-        # one column will be added for the objective # FIXME ???
 
         row_count = 0
         for constraint_description in self.constraints:

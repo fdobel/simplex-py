@@ -1,7 +1,8 @@
 import numpy as np
 
 from solver.helper.tableau import _table_rows_columns
-from solver.helper.tableaus import PlainTableau
+from solver.simplex.plain_tableau import PlainTableau
+from solver.simplex.solution import VariableValues
 
 
 def init_tableau_solution(tableau: PlainTableau, var_names=None):
@@ -25,7 +26,8 @@ def init_tableau_solution(tableau: PlainTableau, var_names=None):
         else:
             val[var_names[i]] = 0
 
-    return val
+    return VariableValues(var_names[:n_model_variables], [val[vn] for vn in var_names[:n_model_variables]])
+
 
 
 def init_var_names(tableau: PlainTableau):

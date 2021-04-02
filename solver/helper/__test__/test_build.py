@@ -1,7 +1,7 @@
 import unittest
 
 from solver.helper.convert import constr_string_convert, obj_string_convert
-from solver.helper.tableaus.plain_tableau import PlainTableau
+from solver.simplex.plain_tableau import PlainTableau
 from solver.helper.tableaus.tableau_builder import TableauBuilder
 
 
