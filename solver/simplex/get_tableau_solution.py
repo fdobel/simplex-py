@@ -10,21 +10,18 @@ def init_tableau_solution(tableau: PlainTableau):
     val = {}
     var_names = init_var_names(tableau)
 
-    print("INIT SOL")
-    print(table)
     for i in range(n_model_variables):
         col = table[:, i]
         s = sum(col)
         m = max(col)
-        # print(s, m)
-        if float(s) == float(m):
+        if float(s) == 1.0 and float(s) == float(m):
             loc = np.where(col == m)[0][0]
             val[var_names[i]] = table[loc, -1]
         else:
             val[var_names[i]] = 0
 
-    print(val)
     return val
+
 
 def init_var_names(tableau: PlainTableau):
     lr, lc = _table_rows_columns(tableau.table)

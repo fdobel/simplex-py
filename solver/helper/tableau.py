@@ -19,7 +19,7 @@ def _update_table(table):
     return empty
 
 
-def _add_constraint(table):
+def _can_add_constraint(table):
 
     empty = _update_table(table)
 
@@ -44,28 +44,26 @@ LAST_ROW_IDX = -1
 class PlainTableau:
     def __init__(self, table, var_names=None):
         self.__table = table
+        self._var_names = var_names
 
     @property
     def table(self):
         return self.__table
+
+    @property
+    def variable_count(self):
+        lr, lc = _table_rows_columns(self.__table)
+        return lc - 1
+
+    @property
+    def var_names(self):
+        return self._var_names
 
     def convert_min(self):
         table = self.table
         table[LAST_ROW_IDX, :-2] = [-1 * i for i in table[-1, :-2]]
         table[LAST_ROW_IDX, -1] = -1 * table[-1, -1]
         return PlainTableau(table)
-
-    def get_variable_names(self):
-        """
-        generates variable array
-        :return:
-        """
-        lr, lc = _table_rows_columns(self.__table)
-        n_model_variables = lc - lr - 1
-        v = []
-        for i in range(n_model_variables):
-            v.append('x' + str(i + 1))
-        return v
 
     def collect_result(self):
         from ..simplex.get_tableau_solution import init_tableau_solution
@@ -83,7 +81,7 @@ class TableauBuilder:
         self.cons = cons
         self._table = None
 
-        self.row_counter = 0
+        # self.row_counter = 0
         self._result_table = None
 
     @property
@@ -104,26 +102,29 @@ class TableauBuilder:
 
         self.objective = objective
 
-    def _build_constraint(self, eq):
-        table = self.table
-        if _add_constraint(table):
+    @staticmethod
+    def _build_constraint(table, eq, row_count):
+
+        if _can_add_constraint(table):
             lr, lc = _table_rows_columns(table)
             var = lc - lr - 1
 
-            row = table[self.row_counter, :]
+            row = table[row_count, :]
 
             for i in range(len(eq) - 1):
                 row[i] = eq[i]
             row[-1] = eq[-1]
 
-            row[var + self.row_counter] = 1
-
-            self.row_counter += 1
+            row[var + row_count] = 1
+            # FIXME this adds a slack variable for each row.
         else:
             print('Cannot add another constraint.')
 
-    def _build_objective(self, eq):
-        table = self.table
+        return table
+
+    @staticmethod
+    def _build_objective(table, eq):
+        # table = self.table
         if _add_objective(table):
             # eq = simple_convert(eq)
             lr = len(table[:, 0])
@@ -136,14 +137,22 @@ class TableauBuilder:
             row[-1] = eq[-1]
         else:
             print('You must finish adding constraints before the objective function can be added.')
+        return table
 
     def get(self):
-        self.cons = len(self.constraints)
-        self._table = np.zeros((self.cons + 1, self.var + self.cons + 2))
+        n_const = len(self.constraints)
+        number_of_slack_variables = n_const
+        self._table = np.zeros((n_const + 1, self.var + number_of_slack_variables + 2))
+        # FIXME assumption here: each constraint function adds a slack variable (columns: + self.cons.)
+        # the table will contain one row for each constraint + 1 for the objective function
+        # one column will be added for the right side
+        # one column will be added for the objective
 
+        row_count = 0
         for c in self.constraints:
-            self._build_constraint(c)
+            self._table = TableauBuilder._build_constraint(self._table, c, row_count)
+            row_count += 1
 
-        self._build_objective(self.objective)
+        self._table = TableauBuilder._build_objective(self._table, self.objective)
 
         return PlainTableau(self._table)
