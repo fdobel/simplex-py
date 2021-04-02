@@ -7,11 +7,12 @@ def _m_return(m):
 
 
 def is_not_final_tableau(table):
-    no_rows = len(table[:, 0])
-    m = min(table[no_rows-1, :-1])
-    return m < 0  # not m >= 0
+    m = min(table[-1, :-1])  # minimum last row <=> minimum objective fct. coeffs
+    return m < 0  # <=> not m >= 0
 
 
 def is_not_final_tableau_r(table):
-    m = min(table[:-1, -1])
-    return m < 0  # not m >= 0
+    # print(table, table[:-1, -1])
+    # print(table.shape, table[:-1, -1].shape)
+    m = min(table[:-1, -1])  # minimum last column. <=> minimum right side.
+    return m < 0  # <=> not m >= 0

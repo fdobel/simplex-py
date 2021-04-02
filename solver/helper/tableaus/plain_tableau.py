@@ -31,3 +31,14 @@ class PlainTableau:
         from ...simplex.get_tableau_solution import init_tableau_solution
         val = init_tableau_solution(self)
         return val
+
+    def __str__(self):
+        s = ""
+        if self._var_names is not None:
+            s += "[%s]" % ", ".join(self.var_names) + "\n"
+
+        row_strings = []
+        for row in self.table:
+            row_strings.append(str(list(row)))
+        s += "\n".join(row_strings)
+        return s

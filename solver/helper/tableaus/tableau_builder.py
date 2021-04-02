@@ -13,8 +13,14 @@ class TableauBuilder:
         self.no_cons = cons
         self._table = None
 
+        self._var_names = None
+
         # self.row_counter = 0
         self._result_table = None
+
+    def with_var_names(self, var_name_array):
+        self._var_names = var_name_array
+        return self
 
     @property
     def table(self):
@@ -96,4 +102,4 @@ class TableauBuilder:
 
         self._table = TableauBuilder._build_objective(self._table, self.objective)
 
-        return PlainTableau(self._table)
+        return PlainTableau(self._table, var_names=self._var_names)
