@@ -4,13 +4,16 @@ from solver.helper.tableau import _table_rows_columns
 from solver.helper.tableaus import PlainTableau
 
 
-def init_tableau_solution(tableau: PlainTableau):
+def init_tableau_solution(tableau: PlainTableau, var_names=None):
+
+    if var_names is None:
+        var_names = init_var_names(tableau)
+
     table = tableau.table
     lrows, lcols = _table_rows_columns(table)
     n_model_variables = lcols - lrows
 
     val = {}
-    var_names = init_var_names(tableau)
 
     for i in range(n_model_variables):
         col = table[:, i]

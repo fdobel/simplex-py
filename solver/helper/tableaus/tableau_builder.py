@@ -86,6 +86,7 @@ class TableauBuilder:
         n_const = len(self.constraints)
 
         number_of_slack_variables = len([c for c in self.constraints if c['add_slack_variable']])
+        names_of_slack_vars = ["_s_%i" % (i+1) for i in range(number_of_slack_variables)]
 
         self._table = np.zeros((n_const + 1, self.no_vars + number_of_slack_variables + 1))
         # FIXME assumption here: each constraint function adds a slack variable (columns: + self.cons.)
@@ -102,4 +103,8 @@ class TableauBuilder:
 
         self._table = TableauBuilder._build_objective(self._table, self.objective)
 
-        return PlainTableau(self._table, var_names=self._var_names)
+        if self._var_names is None:
+            vnames = ["x_%i" % (i+1) for i in range(self.no_vars)] + names_of_slack_vars
+        else:
+            vnames = self._var_names + names_of_slack_vars
+        return PlainTableau(self._table, var_names=vnames)

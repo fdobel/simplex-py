@@ -29,7 +29,7 @@ class PlainTableau:
 
     def collect_result(self):
         from ...simplex.get_tableau_solution import init_tableau_solution
-        val = init_tableau_solution(self)
+        val = init_tableau_solution(self, var_names=self.var_names)
         return val
 
     def __str__(self):

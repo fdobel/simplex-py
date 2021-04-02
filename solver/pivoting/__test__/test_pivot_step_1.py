@@ -16,7 +16,7 @@ class Test(unittest.TestCase):
             .set_objective(obj_string_convert('5,10,0')).get()
 
     def test_pivot_step_0(self):
-        print(self.tableau.table)
+        # print(self.tableau.table)
         self.assertEqual([0, 0], find_pivot_from_row(self.tableau.table))
         # next_table = Optimization.do_simplex_step(self.tableau.table)
 
