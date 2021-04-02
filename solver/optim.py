@@ -43,9 +43,6 @@ def compute_new_tableau(piv_pos, old_tableau):
 
 class Optimization:
 
-    def __init__(self):
-        pass
-
     @staticmethod
     def do_simplex_step(table):
         piv_pos = find_pivot_from_row(table)
