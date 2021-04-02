@@ -42,7 +42,7 @@ LAST_ROW_IDX = -1
 
 
 class PlainTableau:
-    def __init__(self, table):
+    def __init__(self, table, var_names=None):
         self.__table = table
 
     @property
@@ -55,13 +55,12 @@ class PlainTableau:
         table[LAST_ROW_IDX, -1] = -1 * table[-1, -1]
         return PlainTableau(table)
 
-    def variable_name(self, table):
+    def get_variable_names(self):
         """
         generates variable array
-        :param table:
         :return:
         """
-        lr, lc = _table_rows_columns(table)
+        lr, lc = _table_rows_columns(self.__table)
         n_model_variables = lc - lr - 1
         v = []
         for i in range(n_model_variables):
@@ -69,21 +68,8 @@ class PlainTableau:
         return v
 
     def collect_result(self):
-        table = self.__table
-
-        lrows, lcols = _table_rows_columns(table)
-        n_model_variables = lcols - lrows - 1
-
-        val = {}
-        for i in range(n_model_variables):
-            col = table[:, i]
-            s = sum(col)
-            m = max(col)
-            if float(s) == float(m):
-                loc = np.where(col == m)[0][0]
-                val[self.variable_name(table)[i]] = table[loc, -1]
-            else:
-                val[self.variable_name(table)[i]] = 0
+        from ..simplex.get_tableau_solution import init_tableau_solution
+        val = init_tableau_solution(self)
         return val
 
 

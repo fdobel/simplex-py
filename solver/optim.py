@@ -46,13 +46,24 @@ class Optimization:
         pass
 
     @staticmethod
+    def do_simplex_step(table):
+        piv_pos = find_pivot_from_row(table)
+        table = compute_new_tableau(piv_pos, table)
+        return table
+
+    @staticmethod
+    def do_simplex_step2(table):
+        piv_pos = find_pivot(table)
+        table = compute_new_tableau(piv_pos, table)
+        return table
+
+    @staticmethod
     def run_simplex(table):
         while is_not_final_tableau_r(table):
-            piv_pos = find_pivot_from_row(table)
-            table = compute_new_tableau(piv_pos, table)
+            table = Optimization.do_simplex_step(table)
         while is_not_final_tableau(table):
-            piv_pos = find_pivot(table)
-            table = compute_new_tableau(piv_pos, table)
+            table = Optimization.do_simplex_step2(table)
+
         return table
 
     def run(self, tableau: PlainTableau):
