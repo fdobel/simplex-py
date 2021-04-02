@@ -77,8 +77,8 @@ class TableauBuilder:
         self.constraints = []
         self.objective = None
 
-        self.var = var
-        self.cons = cons
+        self.no_vars = var
+        self.no_cons = cons
         self._table = None
 
         # self.row_counter = 0
@@ -90,15 +90,15 @@ class TableauBuilder:
 
     def add_constraint(self, constraint, add_slack_variable=True):
 
-        assert self.var is None or (len(constraint) == self.var + 1)
-        if self.var is None:
-            self.var = len(constraint) - 1
+        assert self.no_vars is None or (len(constraint) == self.no_vars + 1)
+        if self.no_vars is None:
+            self.no_vars = len(constraint) - 1
 
         self.constraints.append({'constraint': constraint, 'add_slack_variable': add_slack_variable})
         return self
 
     def set_objective(self, objective):
-        assert len(objective) == self.var + 1
+        assert len(objective) == self.no_vars + 1
         self.objective = objective
         return self
 
@@ -136,7 +136,7 @@ class TableauBuilder:
             while i < len(eq) - 1:
                 row[i] = eq[i] * -1
                 i += 1
-            row[-2] = 1
+            # row[-2] = 1 # FIXME. This does not seem necessary and might even be wrong. Find explanation.
             row[-1] = eq[-1]
         else:
             print('You must finish adding constraints before the objective function can be added.')
@@ -147,11 +147,11 @@ class TableauBuilder:
 
         number_of_slack_variables = len([c for c in self.constraints if c['add_slack_variable']])
 
-        self._table = np.zeros((n_const + 1, self.var + number_of_slack_variables + 2))
+        self._table = np.zeros((n_const + 1, self.no_vars + number_of_slack_variables + 2))
         # FIXME assumption here: each constraint function adds a slack variable (columns: + self.cons.)
         # the table will contain one row for each constraint + 1 for the objective function
         # one column will be added for the right side
-        # one column will be added for the objective
+        # one column will be added for the objective # FIXME ???
 
         row_count = 0
         for constraint_description in self.constraints:
