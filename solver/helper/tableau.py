@@ -88,22 +88,22 @@ class TableauBuilder:
     def table(self):
         return self._table
 
-    def add_constraint(self, constraint):
+    def add_constraint(self, constraint, add_slack_variable=True):
 
         assert self.var is None or (len(constraint) == self.var + 1)
         if self.var is None:
             self.var = len(constraint) - 1
 
-        self.constraints.append(constraint)
+        self.constraints.append({'constraint': constraint, 'add_slack_variable': add_slack_variable})
+        return self
 
     def set_objective(self, objective):
-
         assert len(objective) == self.var + 1
-
         self.objective = objective
+        return self
 
     @staticmethod
-    def _build_constraint(table, eq, row_count):
+    def _build_constraint(table, eq, row_count, add_slack_variable):
 
         if _can_add_constraint(table):
             lr, lc = _table_rows_columns(table)
@@ -115,7 +115,10 @@ class TableauBuilder:
                 row[i] = eq[i]
             row[-1] = eq[-1]
 
-            row[var + row_count] = 1
+            if add_slack_variable:
+                row[var + row_count] = 1
+            else:
+                raise NotImplementedError
             # FIXME this adds a slack variable for each row.
         else:
             print('Cannot add another constraint.')
@@ -141,7 +144,9 @@ class TableauBuilder:
 
     def get(self):
         n_const = len(self.constraints)
-        number_of_slack_variables = n_const
+
+        number_of_slack_variables = len([c for c in self.constraints if c['add_slack_variable']])
+
         self._table = np.zeros((n_const + 1, self.var + number_of_slack_variables + 2))
         # FIXME assumption here: each constraint function adds a slack variable (columns: + self.cons.)
         # the table will contain one row for each constraint + 1 for the objective function
@@ -149,8 +154,10 @@ class TableauBuilder:
         # one column will be added for the objective
 
         row_count = 0
-        for c in self.constraints:
-            self._table = TableauBuilder._build_constraint(self._table, c, row_count)
+        for constraint_description in self.constraints:
+            c = constraint_description['constraint']
+            add_slack_variable = constraint_description['add_slack_variable']
+            self._table = TableauBuilder._build_constraint(self._table, c, row_count, add_slack_variable)
             row_count += 1
 
         self._table = TableauBuilder._build_objective(self._table, self.objective)
