@@ -20,6 +20,7 @@ def _pivot_step(piv, right_side):
         return right_side / piv
     return 0
 
+
 def _choose_piv_element_in_column(table, col_idx):
     col = table[:-1, col_idx]
     right_side = table[:-1, -1]  # last column in table

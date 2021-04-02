@@ -43,8 +43,8 @@ class TableauBuilder:
 
             row = table[row_count, :]
 
-            print(var)
-            print(eq)
+            # print(var)
+            # print(eq)
             for i in range(len(eq) - 1):
                 row[i] = eq[i]
             row[-1] = eq[-1]
