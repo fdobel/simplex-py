@@ -5,7 +5,7 @@ from solver.helper.tableau import PlainTableau, _table_rows_columns
 def init_tableau_solution(tableau: PlainTableau):
     table = tableau.table
     lrows, lcols = _table_rows_columns(table)
-    n_model_variables = lcols - lrows - 1
+    n_model_variables = lcols - lrows
 
     val = {}
     var_names = init_var_names(tableau)
@@ -25,7 +25,7 @@ def init_tableau_solution(tableau: PlainTableau):
 
 def init_var_names(tableau: PlainTableau):
     lr, lc = _table_rows_columns(tableau.table)
-    n_model_variables = lc - lr - 1
+    n_model_variables = lc - lr
     v = []
     for i in range(n_model_variables):
         v.append('x' + str(i + 1))

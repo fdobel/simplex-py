@@ -23,6 +23,7 @@ class Test(unittest.TestCase):
 
     def test_example4(self):
         t = self.t3.get()
+        print(t.table)
         res = PlainTableau(t.table).collect_result()
         self.assertEqual({ 'x1': 0, 'x2': 0}, res)
 

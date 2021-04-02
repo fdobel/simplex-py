@@ -107,10 +107,12 @@ class TableauBuilder:
 
         if _can_add_constraint(table):
             lr, lc = _table_rows_columns(table)
-            var = lc - lr - 1
+            var = lc - lr # number of
 
             row = table[row_count, :]
 
+            print(var)
+            print(eq)
             for i in range(len(eq) - 1):
                 row[i] = eq[i]
             row[-1] = eq[-1]
@@ -147,7 +149,7 @@ class TableauBuilder:
 
         number_of_slack_variables = len([c for c in self.constraints if c['add_slack_variable']])
 
-        self._table = np.zeros((n_const + 1, self.no_vars + number_of_slack_variables + 2))
+        self._table = np.zeros((n_const + 1, self.no_vars + number_of_slack_variables + 1))
         # FIXME assumption here: each constraint function adds a slack variable (columns: + self.cons.)
         # the table will contain one row for each constraint + 1 for the objective function
         # one column will be added for the right side
