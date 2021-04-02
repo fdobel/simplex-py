@@ -1,5 +1,5 @@
 
-from solver.helper.tableau import PlainTableau
+from solver.helper.tableaus import PlainTableau
 from solver.pivoting.pivot import find_pivot_from_row, find_pivot
 from solver.pivoting.table_functions import is_not_final_tableau_r, is_not_final_tableau
 

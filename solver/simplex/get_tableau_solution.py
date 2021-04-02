@@ -1,5 +1,7 @@
 import numpy as np
-from solver.helper.tableau import PlainTableau, _table_rows_columns
+
+from solver.helper.tableau import _table_rows_columns
+from solver.helper.tableaus import PlainTableau
 
 
 def init_tableau_solution(tableau: PlainTableau):
