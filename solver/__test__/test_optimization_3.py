@@ -17,7 +17,7 @@ class Test(unittest.TestCase):
 
     def test_example_with_bigm(self):
         t = self.tableau.get(enable_artif_vars=True)
-        print(t)
+        # print(t)
         result, sol = Optimization.max(t)
         self.assertEqual(result, 51.25)
         self.assertEqual(sol['x1'], 45)

@@ -38,3 +38,11 @@ def tableau_4():
         .add_constraint(constr_string_convert('3,1,<=,24'))\
         .set_objective(obj_string_convert('3,2,0'))
     return tb
+
+
+def tableau_6():
+    tb = TableauBuilder()
+    tb.add_constraint(constr_string_convert('4,4,<=,6'))\
+        .add_constraint(constr_string_convert('1,3,>=,2'))\
+        .set_objective(obj_string_convert('1,5,0'))
+    return tb

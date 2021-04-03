@@ -35,30 +35,21 @@ def tableau_solution(tableau: PlainTableau, var_names=None):
 
     table = tableau.table
 
-    # n_model_variables = tableau.model_vars
-
-    val = {}
-    #for i in range(tableau.variable_count):
-    #    print(i)
-
     selected_variables = []
     for row in tableau.table[:-1]:
         b = row[-1]
         constraint = row[:-1]
-        # print(constraint, b)
         if b < 0:
-            varidx_candidates = np.argwhere(row == -1)  # [0][0]
+            varidx_candidates = np.argwhere(constraint == -1)  # [0][0]
         else:
-            varidx_candidates = np.argwhere(row == 1)  # [0][0]
+            varidx_candidates = np.argwhere(constraint == 1)  # [0][0]
 
         var_idx = None
         for cdt in varidx_candidates:
             c = cdt[0]
-            # print("row", np.abs(table[:-1, c]))
             if np.sum(np.abs(table[:-1, c])) != 1:
                 continue
             var_idx = c
-        # print("col", var_idx)
         assert var_idx is not None
         selected_variables.append((var_names[var_idx], abs(b)))
 
@@ -66,12 +57,8 @@ def tableau_solution(tableau: PlainTableau, var_names=None):
 
 
 def init_var_names(tableau: PlainTableau):
-    # lr, lc = _table_rows_columns(tableau.table)
-    #  n_model_variables = lc - lr
     n_model_variables = tableau.model_vars
-    # print(n_model_variables)
     v = []
     for i in range(n_model_variables):
         v.append('x' + str(i + 1))
-
     return v
