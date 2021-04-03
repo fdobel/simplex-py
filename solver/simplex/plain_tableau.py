@@ -5,11 +5,13 @@ LAST_ROW_IDX = -1
 
 
 class PlainTableau:
-    def __init__(self, table, var_names=None, model_vars=None):
-        assert model_vars is  not None
+    def __init__(self, table, var_names=None, model_vars=None, base_vars=None):
+        assert model_vars is not None
+        assert base_vars is not None
         self._model_vars = model_vars
         self.__table = table
         self._var_names = var_names
+        self._base_vars = base_vars
 
     @property
     def model_vars(self) -> int:
@@ -32,7 +34,7 @@ class PlainTableau:
         table = self.table
         table[LAST_ROW_IDX, :-2] = [-1 * i for i in table[-1, :-2]]
         table[LAST_ROW_IDX, -1] = -1 * table[-1, -1]
-        return PlainTableau(table, var_names=self.var_names, model_vars=self.model_vars)
+        return PlainTableau(table, var_names=self.var_names, model_vars=self.model_vars, base_vars=self._base_vars)
 
     def collect_result(self) -> VariableValues:
         from solver.simplex.get_tableau_solution import init_tableau_solution
