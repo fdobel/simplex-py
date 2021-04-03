@@ -12,7 +12,7 @@ class Test(unittest.TestCase):
         self.tableau = tableau_3()
 
     def test_example4(self):
-        result, sol = Optimization.max(self.tableau)
+        result, sol = Optimization.max(self.tableau.get())
         self.assertEqual(result, 51.25)
         self.assertEqual(sol['x1'], 45)
         self.assertEqual(sol['x2'], 6.25)

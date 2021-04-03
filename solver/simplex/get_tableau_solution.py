@@ -11,8 +11,9 @@ def init_tableau_solution(tableau: PlainTableau, var_names=None):
         var_names = init_var_names(tableau)
 
     table = tableau.table
-    lrows, lcols = _table_rows_columns(table)
-    n_model_variables = lcols - lrows
+    # lrows, lcols = _table_rows_columns(table)
+
+    n_model_variables = tableau.model_vars
 
     val = {}
 
@@ -29,11 +30,22 @@ def init_tableau_solution(tableau: PlainTableau, var_names=None):
     return VariableValues(var_names[:n_model_variables], [val[vn] for vn in var_names[:n_model_variables]])
 
 
+def tableau_solution(tableau: PlainTableau, var_names=None):
+    if var_names is None:
+        var_names = init_var_names(tableau)
+
+    table = tableau.table
+
+    return VariableValues()
+
 
 def init_var_names(tableau: PlainTableau):
-    lr, lc = _table_rows_columns(tableau.table)
-    n_model_variables = lc - lr
+    # lr, lc = _table_rows_columns(tableau.table)
+    #  n_model_variables = lc - lr
+    n_model_variables = tableau.model_vars
+    # print(n_model_variables)
     v = []
     for i in range(n_model_variables):
         v.append('x' + str(i + 1))
+
     return v

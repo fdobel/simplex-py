@@ -17,7 +17,7 @@ def tableau_2():
         .add_constraint(constr_string_convert('8,3,<=,85'))\
         .add_constraint(constr_string_convert('-9,7,<=,42'))\
         .set_objective(obj_string_convert('2,7,0'))
-    return tb.get()
+    return tb
 
 
 def tableau_3():
@@ -28,7 +28,7 @@ def tableau_3():
         .add_constraint(constr_string_convert('0,1,>=,5'))\
         .set_objective(obj_string_convert('1,1,0'))
     # 1, 0 >= 45 <=> -1, 0 <= -45
-    return tb.get()
+    return tb
 
 
 def tableau_4():
@@ -37,4 +37,4 @@ def tableau_4():
         .add_constraint(constr_string_convert('2,3,<=,42'))\
         .add_constraint(constr_string_convert('3,1,<=,24'))\
         .set_objective(obj_string_convert('3,2,0'))
-    return tb.get()
+    return tb

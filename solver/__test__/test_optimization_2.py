@@ -9,7 +9,7 @@ class Test(unittest.TestCase):
 
     def setUp(self):
         from .factories import tableau_2
-        self.tableau = tableau_2()
+        self.tableau = tableau_2().get()
 
     def test_example2(self):
         result, sol = Optimization.max(self.tableau)

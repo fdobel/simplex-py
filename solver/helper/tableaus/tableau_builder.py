@@ -118,17 +118,20 @@ class TableauBuilder:
 
         row_count = 0
         artif_var_count = 0
+        slack_var_count = 0
         for constraint_description in self.constraints:
 
             c = constraint_description['constraint']
 
             if constraint_description['add_slack_variable']:
-                slack_var_idx = self.no_vars + row_count
+                slack_var_idx = self.no_vars + slack_var_count
+                slack_var_count += 1
             else:
                 slack_var_idx = None
 
             if constraint_description['add_artificial_variable'] and enable_artif_vars:
                 artif_var_idx = self.no_vars + number_of_slack_variables + artif_var_count
+                artif_var_count += 1
             else:
                 artif_var_idx = None
 
@@ -147,4 +150,4 @@ class TableauBuilder:
             vnames = ["x_%i" % (i+1) for i in range(self.no_vars)] + slack_vars + artif_vars
         else:
             vnames = self._var_names + slack_vars + artif_vars
-        return PlainTableau(self._table, var_names=vnames)
+        return PlainTableau(self._table, var_names=vnames, model_vars=self.no_vars)

@@ -11,7 +11,7 @@ class Test(unittest.TestCase):
 
     def test_example1(self):
         tableau = self.tableau_builder.get(enable_artif_vars=False)
-        print(tableau)
+        # print(tableau)
         result, sol = Optimization.min(tableau)
         self.assertEqual(result, 25.0)
         self.assertEqual(sol['x1'], 5.0)
@@ -19,7 +19,7 @@ class Test(unittest.TestCase):
 
     def test_example_2(self):
         tableau = self.tableau_builder.get(enable_artif_vars=True)
-        print(tableau)
+        # print(tableau)
         result, sol = Optimization.min(tableau)
         self.assertEqual(result, 25.0)
         self.assertEqual(sol['x1'], 5.0)
