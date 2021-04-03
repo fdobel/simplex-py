@@ -46,3 +46,10 @@ def tableau_6():
         .add_constraint(constr_string_convert('1,3,>=,2'))\
         .set_objective(obj_string_convert('1,5,0'))
     return tb
+
+
+def tableau_unbound():
+    tb = TableauBuilder()
+    tb.add_constraint(constr_string_convert('-1,-1,<=,0'))\
+        .set_objective(obj_string_convert('1,1,0'))
+    return tb

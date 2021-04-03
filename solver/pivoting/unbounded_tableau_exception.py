@@ -1,0 +1,3 @@
+
+class UnboundedTableau(Exception):
+    pass

@@ -4,6 +4,7 @@ from solver.pivoting.table_functions import is_not_final_tableau_r, is_not_final
 
 import numpy as np
 
+from solver.pivoting.unbounded_tableau_exception import UnboundedTableau
 from solver.simplex.plain_tableau import PlainTableau
 
 
@@ -66,7 +67,10 @@ class Optimization:
 
     def run(self, tableau: PlainTableau):
 
-        final_table = self.run_simplex(tableau.table)
+        try:
+            final_table = self.run_simplex(tableau.table)
+        except UnboundedTableau:
+            return "unbounded", tableau.table
 
         val = PlainTableau(final_table, model_vars=tableau.model_vars, base_vars=tableau._base_vars).collect_result()
 
@@ -79,8 +83,13 @@ class Optimization:
         if output == 'table':
             return table
         else:
+            if val == "unbounded":
+                return val, {}
+
+            res = _round_result(val._as_dict())
+
             max_ = table[-1, -1]
-            return max_, _round_result(val._as_dict())
+            return max_, res
 
     @classmethod
     def min(cls, tableau: PlainTableau, output='summary'):

@@ -1,14 +1,16 @@
 import numpy as np
 
+from .unbounded_tableau_exception import UnboundedTableau
 
 def _minimal_positive_pivot(total):
-    element = min(
-        filter(
-            lambda x: x[1] > 0,
-            enumerate(total)
-        ),
-        key=lambda x: x[1]
-    )
+    try:
+        element = min(filter(
+                lambda x: x[1] > 0,
+                enumerate(total)
+            ), key=lambda x: x[1])
+    except ValueError:  # raised if filter function returns empty list. -> min of empty => value error
+        raise UnboundedTableau
+        # FIXME. this should not be caught on value error, but should be checked before getting the minimum.
 
     if element[1] < 0:
         raise AttributeError("pivot element error")
