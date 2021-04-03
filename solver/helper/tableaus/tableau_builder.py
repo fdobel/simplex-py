@@ -162,4 +162,4 @@ class TableauBuilder:
             vnames = self._var_names + slack_vars + artif_vars
 
         base_vars = [vnames[idx] for idx in base_var_idxs]
-        return PlainTableau(self._table, var_names=vnames, model_vars=self.no_vars, base_vars=base_vars)
+        return PlainTableau(self._table, var_names=vnames, model_vars=[vnames[i] for i in range(self.no_vars)], base_vars=base_vars)

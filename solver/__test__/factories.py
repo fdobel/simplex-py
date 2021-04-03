@@ -53,3 +53,11 @@ def tableau_unbound():
     tb.add_constraint(constr_string_convert('-1,-1,<=,0'))\
         .set_objective(obj_string_convert('1,1,0'))
     return tb
+
+
+def tableau_no_solution():
+    tb = TableauBuilder()
+    tb.add_constraint(constr_string_convert('1,1,>=,1.5')) \
+        .add_constraint(constr_string_convert('1,1,<=,1')) \
+        .set_objective(obj_string_convert('1,1,0'))
+    return tb

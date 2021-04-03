@@ -72,7 +72,7 @@ class Optimization:
         except UnboundedTableau:
             return "unbounded", tableau.table
 
-        val = PlainTableau(final_table, model_vars=tableau.model_vars, base_vars=tableau._base_vars).collect_result()
+        val = PlainTableau(final_table, model_vars=tableau._model_vars, base_vars=tableau._base_vars).collect_result()
 
         return val, final_table
 
