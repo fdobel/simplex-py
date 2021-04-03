@@ -21,7 +21,7 @@ class Test(unittest.TestCase):
 
     def test_run_for_solution(self):
         t = self.tb.get()
-        result_table = Optimization().run_simplex(t.table)
+        result_table = Optimization().run_simplex(t.table, t.var_names)
 
         tabl = PlainTableau(
             result_table,

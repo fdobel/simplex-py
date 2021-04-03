@@ -25,3 +25,7 @@ class VariableValues:
 
     def __str__(self):
         return ";".join(["%s:%s" % (n, str(v)) for n, v in zip(self._var_names, self._var_values)])
+
+    @property
+    def vars(self):
+        return self._var_names

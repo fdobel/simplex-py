@@ -43,7 +43,7 @@ class PlainTableau:
 
     def intermediate_solution(self) -> VariableValues:
         from solver.simplex.get_tableau_solution import tableau_solution
-        val = tableau_solution(self, var_names=self.var_names)
+        val = tableau_solution(self.table, var_names=self.var_names)
         return val
 
     def __str__(self):
