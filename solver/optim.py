@@ -59,20 +59,30 @@ class Optimization:
         return table
 
     @staticmethod
+    def run_simplex_iteratively(table, var_names):
+        while is_not_final_tableau_r(table):
+            table = Optimization.do_simplex_step(table)
+            yield tableau_solution(table, var_names=var_names)
+        # print("--")
+        while is_not_final_tableau(table):
+            table = Optimization.do_simplex_step2(table)
+            yield tableau_solution(table, var_names=var_names)
+
+        return table
+
+    @staticmethod
     def run_simplex(table, var_names):
         while is_not_final_tableau_r(table):
             table = Optimization.do_simplex_step(table)
-            # print(tableau_solution(table, var_names=var_names).vars)
 
         while is_not_final_tableau(table):
             table = Optimization.do_simplex_step2(table)
-            # print(tableau_solution(table, var_names=var_names).vars)
 
         return table
 
     def run(self, tableau: PlainTableau):
         initial_solution = tableau_solution(tableau.table, var_names=tableau.var_names)
-        # print(initial_solution.vars)
+        print(initial_solution.vars)
 
         try:
             final_table = self.run_simplex(tableau.table, var_names=tableau.var_names)
