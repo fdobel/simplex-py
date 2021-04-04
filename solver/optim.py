@@ -60,6 +60,9 @@ class Optimization:
 
     @staticmethod
     def run_simplex_iteratively(table, var_names):
+        initial_solution = tableau_solution(table, var_names=var_names)
+        yield initial_solution
+
         while is_not_final_tableau_r(table):
             table = Optimization.do_simplex_step(table)
             yield tableau_solution(table, var_names=var_names)
@@ -81,9 +84,6 @@ class Optimization:
         return table
 
     def run(self, tableau: PlainTableau):
-        initial_solution = tableau_solution(tableau.table, var_names=tableau.var_names)
-        print(initial_solution.vars)
-
         try:
             final_table = self.run_simplex(tableau.table, var_names=tableau.var_names)
         except UnboundedTableau:
