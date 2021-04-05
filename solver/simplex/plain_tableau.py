@@ -14,6 +14,10 @@ class PlainTableau:
         self._base_vars = base_vars
 
     @property
+    def objective_function(self):
+        return self._var_names, self.__table[-1, :-1]
+
+    @property
     def model_vars(self) -> int:
         return len(self._model_vars)
 

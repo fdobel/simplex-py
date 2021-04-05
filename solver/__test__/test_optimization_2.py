@@ -20,7 +20,9 @@ class Test(unittest.TestCase):
 
     def test_iteration(self):
         res = [i for i in
-         Optimization.run_simplex_iteratively(self.tableau.table, var_names=self.tableau.var_names)]
+               Optimization.run_simplex_iteratively(
+                   self.tableau.table, var_names=self.tableau.var_names
+               )]
 
         self.assertEqual(len(res), 6)
         self.assertEqual(res[0], VariableValues(["_a_1", "_a_2","_s_3","_s_4"], [30.0, 5.0, 85.0, 42.0]))
@@ -28,5 +30,9 @@ class Test(unittest.TestCase):
         self.assertEqual(res[2], VariableValues(["x_1", "x_2", "_s_3", "_s_4"], [5.0, 4.0, 33.0, 58.99999999999999]))
         self.assertEqual(res[3], VariableValues(["x_1", "x_2", "_s_1", "_s_4"],
                                                 [8.36734693877551, 6.020408163265307, 16.83673469387755, 75.16326530612244]))
+        self.assertEqual(res[4], VariableValues(["x_1", "x_2", "_s_1", "_s_2"],
+                                                [5.6506024096385525, 13.265060240963855, 47.62650602409638, 44.373493975903614]))
+        self.assertEqual(res[5], VariableValues(["x_1", "x_2", "_s_1", "_s_2"],
+                                                [5.650602409638553, 13.265060240963857, 47.626506024096386, 44.373493975903614]))
 
 
