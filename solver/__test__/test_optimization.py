@@ -18,7 +18,7 @@ class Test(unittest.TestCase):
     #    self.assertEqual(sol['x2'], 0)
 
     def test_example_2(self):
-        tableau = self.tableau_builder.get(enable_artif_vars=True)
+        tableau = self.tableau_builder.get()
         result, sol = Optimization.min(tableau)
         self.assertEqual(result, 25.0)
         self.assertEqual(sol['x1'], 5.0)

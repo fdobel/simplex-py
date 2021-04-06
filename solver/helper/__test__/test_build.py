@@ -28,7 +28,7 @@ class Test(unittest.TestCase):
     def test_single_constraint_and_objective_result(self):
         self.tb.add_constraint(constr_string_convert('2,5,>=,30'))
         self.tb.set_objective(obj_string_convert('5,10,0'))
-        res = self.tb.get(enable_artif_vars=True)
+        res = self.tb.get()
         res_list = list(res.table)
         self.assertEqual(list(res_list[0]), [ -2.,  -5.,   1.,  -1,  -30.])
         self.assertEqual(list(res_list[1]), [ -5., -10.,   0.,   1000, 0.])

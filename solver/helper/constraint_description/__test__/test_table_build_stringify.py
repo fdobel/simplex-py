@@ -7,7 +7,7 @@ class Test(unittest.TestCase):
 
     def setUp(self):
         from solver.__test__.factories import tableau_1
-        self.tableau = tableau_1().get(enable_artif_vars=True)
+        self.tableau = tableau_1().get()
 
     def test(self):
         res = stringify(self.tableau)

@@ -1,3 +1,4 @@
+from solver.helper.constraint_description.constraint import Constraint, GreaterEqualThan, LessEqualThan
 from solver.helper.tableau import _can_add_constraint, _table_rows_columns, _can_add_objective
 from solver.simplex.plain_tableau import PlainTableau
 import numpy as np
@@ -26,7 +27,7 @@ class TableauBuilder:
     def table(self):
         return self._table
 
-    def add_constraint(self, constraint, add_slack_variable=True):
+    def add_constraint(self, constraint: Constraint, add_slack_variable=True):
 
         assert self.no_vars is None or (len(constraint) == self.no_vars + 1)
         if self.no_vars is None:
@@ -99,12 +100,12 @@ class TableauBuilder:
             print('You must finish adding constraints before the objective function can be added.')
         return table
 
-    def get(self, enable_artif_vars=True):
+    def get(self):
         n_const = len(self.constraints)
 
         number_of_slack_variables = len([c for c in self.constraints if c['add_slack_variable']])
 
-        number_of_artificial_variables = len([c for c in self.constraints if c['add_artificial_variable'] and enable_artif_vars])
+        number_of_artificial_variables = len([c for c in self.constraints if c['add_artificial_variable']])
 
         artif_vars = ["_a_%i" % (i+1) for i in range(number_of_artificial_variables)]
 
@@ -124,8 +125,13 @@ class TableauBuilder:
 
             c = constraint_description['constraint']
 
+            if isinstance(c, GreaterEqualThan):
+                pass
+            if isinstance(c, LessEqualThan):
+                pass
+
             added_artif = False
-            if constraint_description['add_artificial_variable'] and enable_artif_vars:
+            if constraint_description['add_artificial_variable']:
                 artif_var_idx = self.no_vars + number_of_slack_variables + artif_var_count
                 # add artifvar to initial base
                 base_var_idxs.append(artif_var_idx)
@@ -134,7 +140,6 @@ class TableauBuilder:
                 added_artif = True
             else:
                 artif_var_idx = None
-
 
             if constraint_description['add_slack_variable']:
                 slack_var_idx = self.no_vars + slack_var_count

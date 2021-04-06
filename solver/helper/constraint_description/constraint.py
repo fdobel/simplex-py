@@ -17,6 +17,11 @@ class Constraint:
         s = ["%.2f*%s" % (float(c), vn) for vn, c in zip(var_names, self._coeffs)]
         return "%s %s %.2f" % (" + ".join(s), self.sign(), self._b)
 
+    def __len__(self):
+        return len(self._coeffs) + 1
+
+    def __getitem__(self, item):
+        return (self._coeffs + [self._b]).__getitem__(item)
 
 class LessEqualThan(Constraint):
     def sign(self):

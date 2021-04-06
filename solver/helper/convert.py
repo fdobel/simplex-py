@@ -1,3 +1,4 @@
+from solver.helper.constraint_description.constraint import GreaterEqualThan, LessEqualThan
 
 
 def obj_string_convert(eq):
@@ -10,10 +11,9 @@ def constr_string_convert(eq):
         g = eq.index('>=')
         del eq[g]
         eq = [float(i)*-1 for i in eq]
-        return eq
+        return GreaterEqualThan(eq[:-1], eq[-1])
     if '<=' in eq:
         l = eq.index('<=')
         del eq[l]
         eq = [float(i) for i in eq]
-        return eq
-
+        return LessEqualThan(eq[:-1], eq[-1])
