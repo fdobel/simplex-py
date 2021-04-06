@@ -121,6 +121,7 @@ class TableauBuilder:
         artif_var_count = 0
         slack_var_count = 0
         base_var_idxs = []
+
         for constraint_description in self.constraints:
 
             c = constraint_description['constraint']
@@ -166,5 +167,9 @@ class TableauBuilder:
         else:
             vnames = self._var_names + slack_vars + artif_vars
 
-        base_vars = [vnames[idx] for idx in base_var_idxs]
-        return PlainTableau(self._table, var_names=vnames, model_vars=[vnames[i] for i in range(self.no_vars)], base_vars=base_vars)
+        #base_vars = [vnames[idx] for idx in base_var_idxs]
+        return PlainTableau(
+            self._table, var_names=vnames,
+            model_vars=[vnames[i] for i in range(self.no_vars)],
+            base_var_indices=base_var_idxs
+        )

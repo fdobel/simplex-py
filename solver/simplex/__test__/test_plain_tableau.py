@@ -36,3 +36,6 @@ class Test(unittest.TestCase):
             "[1.0, 1.0, 0.0, 1.0, 0.0, 20.0]\n"
             "[-5.0, -10.0, 0.0, 0.0, 1000.0, 0.0]"
         )
+
+    def test_base_var_indices(self):
+        self.assertEqual(self.tableau.base_var_indices, [4, 3])

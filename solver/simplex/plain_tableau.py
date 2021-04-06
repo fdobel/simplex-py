@@ -5,13 +5,17 @@ LAST_ROW_IDX = -1
 
 
 class PlainTableau:
-    def __init__(self, table, var_names=None, model_vars=None, base_vars=None):
+    def __init__(self, table, var_names=None, model_vars=None, base_var_indices=None):
         assert isinstance(model_vars, list)  # is not None
-        assert base_vars is not None
+        assert base_var_indices is not None
         self._model_vars = model_vars
         self.__table = table
         self._var_names = var_names
-        self._base_vars = base_vars
+        self._base_var_indices = base_var_indices
+
+    @property
+    def base_var_indices(self):
+        return self._base_var_indices  # return [idx for var_name, idx in zip(self._var_names, range(len(self._var_names))) if var_name in self._base_vars]
 
     @property
     def objective_function(self):
@@ -38,7 +42,7 @@ class PlainTableau:
         table = self.table
         table[LAST_ROW_IDX, :-2] = [-1 * i for i in table[-1, :-2]]
         table[LAST_ROW_IDX, -1] = -1 * table[-1, -1]
-        return PlainTableau(table, var_names=self.var_names, model_vars=self._model_vars, base_vars=self._base_vars)
+        return PlainTableau(table, var_names=self.var_names, model_vars=self._model_vars, base_var_indices=self._base_var_indices)
 
     def collect_result(self) -> VariableValues:
         from solver.simplex.get_tableau_solution import init_tableau_solution

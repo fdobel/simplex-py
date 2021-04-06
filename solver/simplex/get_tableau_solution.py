@@ -29,6 +29,23 @@ def init_tableau_solution(tableau: PlainTableau, var_names=None):
     return VariableValues(var_names[:n_model_variables], [val[vn] for vn in var_names[:n_model_variables]])
 
 
+def table_solution_from_base_indices(table, var_names, base_indices):
+    _var_names = []
+    var_values = []
+    # print()
+    for bind in base_indices:
+        col = table[:-1, bind]
+        row_ind = np.argwhere(table[:-1, bind] != 0.0)[0][0]
+
+        b = table[row_ind, -1]
+        var_value = b / col[row_ind]
+        # print(col, var_value)
+        _var_names.append(var_names[bind])
+        var_values.append(var_value)
+
+    return VariableValues(_var_names, var_values)
+
+
 def tableau_solution(table, var_names=None):
     fr = table[0]
     assert len(fr) == len(var_names) + 1

@@ -21,6 +21,7 @@ class VariableValues:
         if not isinstance(other, VariableValues):
             return False
 
+        # print("compare", str(self), str(other))
         return self._as_dict() == other._as_dict()
 
     def __str__(self):

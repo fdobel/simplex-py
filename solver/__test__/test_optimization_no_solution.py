@@ -27,7 +27,7 @@ class Test(unittest.TestCase):
             result_table,
             var_names=["x1", "x2", "_s_1", "_s_2", "_a_1"],
             model_vars=['x1', 'x2'],
-            base_vars=["x2", "_a_1"]
+            base_var_indices=[1, 4]  # s=["x2", "_a_1"]
         )
         # print(t.collect_result())
         vv = tabl.intermediate_solution()

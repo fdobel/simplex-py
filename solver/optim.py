@@ -6,8 +6,7 @@ import numpy as np
 
 from solver.pivoting.unbounded_tableau_exception import UnboundedTableau
 from solver.simplex.plain_tableau import PlainTableau
-from solver.simplex.get_tableau_solution import tableau_solution
-
+from solver.simplex.get_tableau_solution import tableau_solution, table_solution_from_base_indices
 
 
 def _round_result(val):
@@ -50,25 +49,29 @@ class Optimization:
     def do_simplex_step(table):
         piv_pos = find_pivot_from_row(table)
         table = compute_new_tableau(piv_pos, table)
-        return table
+        return table, piv_pos
 
     @staticmethod
     def do_simplex_step2(table):
         piv_pos = find_pivot(table)
         table = compute_new_tableau(piv_pos, table)
-        return table
+        return table, piv_pos
 
     @staticmethod
-    def run_simplex_iteratively(table, var_names):
-        initial_solution = tableau_solution(table, var_names=var_names)
+    def run_simplex_iteratively(table, var_names, initial_base_indices):
+        base_indices = initial_base_indices
+        # initial_solution = tableau_solution(table, var_names=var_names)
+        initial_solution = table_solution_from_base_indices(table, var_names, base_indices)
+
         yield initial_solution
 
         while is_not_final_tableau_r(table):
-            table = Optimization.do_simplex_step(table)
+            table, piv_pos = Optimization.do_simplex_step(table)
+            # entering base indices: piv_pos[1]
             yield tableau_solution(table, var_names=var_names)
         # print("--")
         while is_not_final_tableau(table):
-            table = Optimization.do_simplex_step2(table)
+            table, piv_pos = Optimization.do_simplex_step2(table)
             yield tableau_solution(table, var_names=var_names)
 
         return table
@@ -76,20 +79,24 @@ class Optimization:
     @staticmethod
     def run_simplex(table, var_names):
         while is_not_final_tableau_r(table):
-            table = Optimization.do_simplex_step(table)
+            table, piv_pos = Optimization.do_simplex_step(table)
 
         while is_not_final_tableau(table):
-            table = Optimization.do_simplex_step2(table)
+            table, piv_pos = Optimization.do_simplex_step2(table)
 
         return table
 
     def run(self, tableau: PlainTableau):
+        # INTIALIZE BASE SOLUTION (INDICES / COLUMN IN TABLE).
+        initial_solution = tableau.base_var_indices
+        print("Initial", initial_solution)
+
         try:
             final_table = self.run_simplex(tableau.table, var_names=tableau.var_names)
         except UnboundedTableau:
             return "unbounded", tableau.table
 
-        val = PlainTableau(final_table, model_vars=tableau._model_vars, base_vars=tableau._base_vars).collect_result()
+        val = PlainTableau(final_table, model_vars=tableau._model_vars, base_var_indices=tableau.base_var_indices).collect_result()
 
         return val, final_table
 
