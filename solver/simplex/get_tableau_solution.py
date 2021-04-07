@@ -35,7 +35,7 @@ def table_solution_from_base_indices(table, var_names, base_indices):
     # print()
     for bind in base_indices:
         col = table[:-1, bind]
-        row_ind = np.argwhere(table[:-1, bind] != 0.0)[0][0]
+        row_ind = np.argwhere((-1e-9 >= col) | (col >= 1e-9))[0][0]
 
         b = table[row_ind, -1]
         var_value = b / col[row_ind]
