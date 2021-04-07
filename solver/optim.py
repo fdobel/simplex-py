@@ -64,15 +64,27 @@ class Optimization:
         initial_solution = table_solution_from_base_indices(table, var_names, base_indices)
 
         yield initial_solution
-
+        # print(table)
+        # print(base_indices)
         while is_not_final_tableau_r(table):
             table, piv_pos = Optimization.do_simplex_step(table)
-            # entering base indices: piv_pos[1]
-            yield tableau_solution(table, var_names=var_names)
+            base_indices[piv_pos[0]] = piv_pos[1]
+            sol = table_solution_from_base_indices(table, var_names, base_indices)
+            # tableau_solution(table, var_names=var_names)
+            # print(sol)
+            yield sol
         # print("--")
+        print(base_indices)
         while is_not_final_tableau(table):
             table, piv_pos = Optimization.do_simplex_step2(table)
-            yield tableau_solution(table, var_names=var_names)
+            print("AAA")
+            print(table)
+            print(piv_pos)
+            base_indices[piv_pos[0]] = piv_pos[1]
+            print(base_indices)
+            sol = table_solution_from_base_indices(table, var_names, base_indices)
+            print(sol)
+            yield sol  # tableau_solution(table, var_names=var_names)
 
         return table
 
