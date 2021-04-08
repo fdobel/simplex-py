@@ -14,6 +14,6 @@ class Test(unittest.TestCase):
     def test_example4(self):
         result, sol = Optimization.max(self.tableau)
         self.assertEqual(result, 33)
-        self.assertEqual(sol['x1'], 3)
-        self.assertEqual(sol['x2'], 12)
+        self.assertEqual(sol['x_1'], 3)
+        self.assertEqual(sol['x_2'], 12)
 

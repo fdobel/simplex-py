@@ -21,8 +21,8 @@ class Test(unittest.TestCase):
         tableau = self.tableau_builder.get()
         result, sol = Optimization.min(tableau)
         self.assertEqual(result, 25.0)
-        self.assertEqual(sol['x1'], 5.0)
-        self.assertEqual(sol['x2'], 0)
+        self.assertEqual(sol['x_1'], 5.0)
+        self.assertEqual(sol['x_2'], 0)
 
     def test_step_1(self):
         t = self.tableau_builder.get()

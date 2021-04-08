@@ -8,6 +8,7 @@ class PlainTableau:
     def __init__(self, table, var_names=None, model_vars=None, base_var_indices=None):
         assert isinstance(model_vars, list)  # is not None
         assert base_var_indices is not None
+        assert var_names is not None
         self._model_vars = model_vars
         self.__table = table
         self._var_names = var_names
@@ -42,15 +43,20 @@ class PlainTableau:
         table = self.table
         table[LAST_ROW_IDX, :-2] = [-1 * i for i in table[-1, :-2]]
         table[LAST_ROW_IDX, -1] = -1 * table[-1, -1]
-        return PlainTableau(table, var_names=self.var_names, model_vars=self._model_vars, base_var_indices=self._base_var_indices)
+        return PlainTableau(
+            table, var_names=self.var_names,
+            model_vars=self._model_vars, base_var_indices=self._base_var_indices)
 
     def collect_result(self) -> VariableValues:
-        from solver.simplex.get_tableau_solution import init_tableau_solution
-        val = init_tableau_solution(self, var_names=self.var_names)
-        return val
+        from solver.simplex.get_tableau_solution import init_tableau_solution, table_solution_from_base_indices
+        # val = init_tableau_solution(self, var_names=self.var_names)
+        val = table_solution_from_base_indices(self.table, self.var_names, self.base_var_indices)
+
+        return VariableValues(self._model_vars, [(val[m] if m in val else 0) for m in self._model_vars])
+        # return val
 
     def intermediate_solution(self) -> VariableValues:
-        from solver.simplex.get_tableau_solution import tableau_solution, table_solution_from_base_indices
+        from solver.simplex.get_tableau_solution import table_solution_from_base_indices
         val = table_solution_from_base_indices(self.table, self._var_names, self.base_var_indices)
         # val = tableau_solution(self.table, var_names=self.var_names)
         return val

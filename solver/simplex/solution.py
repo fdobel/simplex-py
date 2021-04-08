@@ -24,6 +24,12 @@ class VariableValues:
         # print("compare", str(self), str(other))
         return self._as_dict() == other._as_dict()
 
+    def __getitem__(self, item):
+        return self._var_values[self._var_names.index(item)]
+
+    def __contains__(self, item):
+        return self._var_names.__contains__(item)
+
     def __str__(self):
         return ";".join(["%s:%s" % (n, str(v)) for n, v in zip(self._var_names, self._var_values)])
 

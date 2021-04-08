@@ -6,7 +6,7 @@ import numpy as np
 
 from solver.pivoting.unbounded_tableau_exception import UnboundedTableau
 from solver.simplex.plain_tableau import PlainTableau
-from solver.simplex.get_tableau_solution import tableau_solution, table_solution_from_base_indices
+from solver.simplex.get_tableau_solution import table_solution_from_base_indices
 
 
 def _round_result(val):
@@ -103,7 +103,10 @@ class Optimization:
         except UnboundedTableau:
             return "unbounded", tableau.table
 
-        val = PlainTableau(final_table, model_vars=tableau._model_vars, base_var_indices=final_base).collect_result()
+        val = PlainTableau(
+            final_table, var_names=tableau.var_names,
+            model_vars=tableau._model_vars, base_var_indices=final_base
+        ).collect_result()
 
         return val, final_table
 

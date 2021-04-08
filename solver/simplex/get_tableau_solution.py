@@ -1,6 +1,5 @@
 import numpy as np
 
-from solver.helper.tableau import _table_rows_columns
 from solver.simplex.plain_tableau import PlainTableau
 from solver.simplex.solution import VariableValues
 
@@ -45,7 +44,7 @@ def table_solution_from_base_indices(table, var_names, base_indices):
 
     return VariableValues(_var_names, var_values)
 
-
+"""
 def tableau_solution(table, var_names=None):
     fr = table[0]
     assert len(fr) == len(var_names) + 1
@@ -73,6 +72,7 @@ def tableau_solution(table, var_names=None):
         selected_variables.append((var_names[var_idx], abs(b)))
 
     return VariableValues([n for n, _ in selected_variables], [v for _, v in selected_variables])
+"""
 
 
 def init_var_names(tableau: PlainTableau):

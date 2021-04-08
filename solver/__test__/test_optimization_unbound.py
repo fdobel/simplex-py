@@ -25,7 +25,7 @@ class Test(unittest.TestCase):
 
     def test_unbound_objective(self):
         result, sol = Optimization.min(self.tb.get())
-        self.assertEqual(sol, {'x1': 0, 'x2': 0})
+        self.assertEqual(sol, {'x_1': 0, 'x_2': 0})
 
 
 

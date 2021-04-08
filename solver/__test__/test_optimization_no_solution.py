@@ -1,6 +1,4 @@
 import unittest
-from solver.helper.convert import constr_string_convert, obj_string_convert
-from solver.helper.tableaus import TableauBuilder
 
 from solver.optim import Optimization
 from solver.simplex.plain_tableau import PlainTableau
@@ -36,7 +34,7 @@ class Test(unittest.TestCase):
 
     def test_no_solution_objective(self):
         result, sol = Optimization.min(self.tb.get())
-        self.assertEqual(sol, {'x1': 1.0, 'x2': 1.0})
+        self.assertEqual(sol, {'x_1': 1.0, 'x_2': 0})
 
 
 
