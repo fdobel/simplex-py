@@ -21,18 +21,17 @@ class Test(unittest.TestCase):
 
     def test_run_for_solution(self):
         t = self.tb.get()
-        result_table = Optimization().run_simplex(t.table, t.var_names)
+        result_table, res_base_indices = Optimization().run_simplex(t.table, t.var_names, t.base_var_indices)
 
         tabl = PlainTableau(
             result_table,
             var_names=["x1", "x2", "_s_1", "_s_2", "_a_1"],
             model_vars=['x1', 'x2'],
-            base_var_indices=[1, 4]  # s=["x2", "_a_1"]
+            base_var_indices=res_base_indices
         )
-        # print(t.collect_result())
         vv = tabl.intermediate_solution()
 
-        self.assertEqual(vv._as_dict(), {'_a_1': 0.5, 'x2': 1.0})
+        self.assertEqual(vv._as_dict(), {'_a_1': 0.5, 'x1': 1.0})
         # self.assertEqual(sol, {'x1': 1.0, 'x2': 1.0})
 
     def test_no_solution_objective(self):

@@ -82,26 +82,28 @@ class Optimization:
         return table
 
     @staticmethod
-    def run_simplex(table, var_names):
+    def run_simplex(table, var_names, initial_base_var_indicies):
+        base_indices = initial_base_var_indicies
         while is_not_final_tableau_r(table):
             table, piv_pos = Optimization.do_simplex_step(table)
+            base_indices[piv_pos[0]] = piv_pos[1]
 
         while is_not_final_tableau(table):
             table, piv_pos = Optimization.do_simplex_step2(table)
+            base_indices[piv_pos[0]] = piv_pos[1]
 
-        return table
+        return table, base_indices
 
     def run(self, tableau: PlainTableau):
         # INTIALIZE BASE SOLUTION (INDICES / COLUMN IN TABLE).
         initial_solution = tableau.base_var_indices
-        print("Initial", initial_solution)
 
         try:
-            final_table = self.run_simplex(tableau.table, var_names=tableau.var_names)
+            final_table, final_base = self.run_simplex(tableau.table, tableau.var_names, initial_solution)
         except UnboundedTableau:
             return "unbounded", tableau.table
 
-        val = PlainTableau(final_table, model_vars=tableau._model_vars, base_var_indices=tableau.base_var_indices).collect_result()
+        val = PlainTableau(final_table, model_vars=tableau._model_vars, base_var_indices=final_base).collect_result()
 
         return val, final_table
 

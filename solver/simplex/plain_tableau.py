@@ -50,8 +50,9 @@ class PlainTableau:
         return val
 
     def intermediate_solution(self) -> VariableValues:
-        from solver.simplex.get_tableau_solution import tableau_solution
-        val = tableau_solution(self.table, var_names=self.var_names)
+        from solver.simplex.get_tableau_solution import tableau_solution, table_solution_from_base_indices
+        val = table_solution_from_base_indices(self.table, self._var_names, self.base_var_indices)
+        # val = tableau_solution(self.table, var_names=self.var_names)
         return val
 
     def __str__(self):
