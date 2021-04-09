@@ -9,7 +9,7 @@ from solver.simplex.solution import VariableValues
 class Test(unittest.TestCase):
 
     def setUp(self):
-        self.tableau = tableau_1().get()  # PlainTableau(, [2.0, 1.0])
+        self.tableau = tableau_1().get(optim="max")  # PlainTableau(, [2.0, 1.0])
 
     def test_objective(self):
         var_names, coeffs = self.tableau.objective_function

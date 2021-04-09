@@ -19,12 +19,13 @@ class Test(unittest.TestCase):
         self.assertEqual(list(rows[1]), [-1.0, -1.0, 0.0, 0.0])
 
     def test_example4(self):
-        result, sol = Optimization.max(self.tb.get())
+        result, sol = Optimization.max(self.tb.get(optim="max"))
         self.assertEqual(result, "unbounded")
         self.assertEqual(sol, {})
 
     def test_unbound_objective(self):
-        result, sol = Optimization.min(self.tb.get())
+        result, sol = Optimization.max(self.tb.get(optim="min"))
+        self.assertEqual(result, 0.0)
         self.assertEqual(sol, {'x_1': 0, 'x_2': 0})
 
 

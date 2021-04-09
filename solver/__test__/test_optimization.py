@@ -17,10 +17,17 @@ class Test(unittest.TestCase):
     #    self.assertEqual(sol['x1'], 5.0)
     #    self.assertEqual(sol['x2'], 0)
 
-    def test_example_2(self):
-        tableau = self.tableau_builder.get()
-        result, sol = Optimization.min(tableau)
-        self.assertEqual(result, 25.0)
+    def test_example_max(self):
+        tableau = self.tableau_builder.get(optim="min")
+        result, sol = Optimization.max(tableau)
+        self.assertEqual(result, -25.0)
+        self.assertEqual(sol['x_1'], 5.0)
+        self.assertEqual(sol['x_2'], 0)
+
+    def test_example_3(self):
+        tableau = self.tableau_builder.get(optim="min")
+        result, sol = Optimization.max(tableau)
+        self.assertEqual(result, -25.0)
         self.assertEqual(sol['x_1'], 5.0)
         self.assertEqual(sol['x_2'], 0)
 

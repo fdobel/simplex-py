@@ -33,7 +33,7 @@ class Test(unittest.TestCase):
         # self.assertEqual(sol, {'x1': 1.0, 'x2': 1.0})
 
     def test_no_solution_objective(self):
-        result, sol = Optimization.min(self.tb.get())
+        result, sol = Optimization.max(self.tb.get(optim="min"))
         self.assertEqual(sol, {'x_1': 1.0, 'x_2': 0})
 
 

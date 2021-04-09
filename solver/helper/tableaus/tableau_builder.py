@@ -80,7 +80,7 @@ class TableauBuilder:
         return table
 
     @staticmethod
-    def _build_objective(table, eq, bigm_indices):
+    def _build_objective(table, eq, bigm_indices, optim_direction):
         # table = self.table
         if _can_add_objective(table):
             # eq = simple_convert(eq)
@@ -88,7 +88,10 @@ class TableauBuilder:
             row = table[lr - 1, :]
             i = 0
             while i < len(eq) - 1:
-                row[i] = eq[i] * -1
+                if optim_direction == "max":
+                    row[i] = eq[i] * -1
+                else:
+                    row[i] = eq[i]
                 i += 1
 
             for idx in bigm_indices:
@@ -100,7 +103,7 @@ class TableauBuilder:
             print('You must finish adding constraints before the objective function can be added.')
         return table
 
-    def get(self):
+    def get(self, optim="max"):
         n_const = len(self.constraints)
 
         number_of_slack_variables = len([c for c in self.constraints if c['add_slack_variable']])
@@ -160,7 +163,7 @@ class TableauBuilder:
                         range(self.no_vars + number_of_slack_variables,
                               self.no_vars + number_of_slack_variables + number_of_artificial_variables)
                         ]
-        self._table = TableauBuilder._build_objective(self._table, self.objective, bigm_indices)
+        self._table = TableauBuilder._build_objective(self._table, self.objective, bigm_indices, optim)
 
         if self._var_names is None:
             vnames = ["x_%i" % (i+1) for i in range(self.no_vars)] + slack_vars + artif_vars

@@ -29,7 +29,7 @@ class Test(unittest.TestCase):
         tbl = PlainTableau(t.table, var_names=self.var_names, model_vars=['x_1', 'x_2'], base_var_indices=[2, 3, 4])
 
         res = tbl.collect_result()
-        print(res)
+        # print(res)
         self.assertEqual(VariableValues.from_dict({ 'x_1': 0, 'x_2': 0}), res)
 
     def test_step(self):

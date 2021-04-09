@@ -25,8 +25,8 @@ class Test(unittest.TestCase):
         self.assertEqual(sol['x_2'], 1.5)
 
     def test_unbound_objective(self):
-        result, sol = Optimization.min(self.tb.get())
-        # print(result, sol)
+        result, sol = Optimization.max(self.tb.get(optim="min"))
+        self.assertEqual(result, -2.5)
         self.assertEqual(sol, {'x_1': 1.25, 'x_2': 0.25})
 
 
