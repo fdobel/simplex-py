@@ -61,17 +61,28 @@ class TableauBuilder:
             # print(var)
             # print(eq)
             for i in range(len(eq) - 1):
-                row[i] = eq[i]
-            row[-1] = eq[-1]
+                if isinstance(eq, GreaterEqualThan):
+                    row[i] = -eq[i]
+                else:
+                    row[i] = eq[i]
+
+            if isinstance(eq, GreaterEqualThan):
+                row[-1] = -eq[-1]
+            else:
+                row[-1] = eq[-1]
 
             if add_slack_variable_index is not None:
                 # slack_var_idx = var + table_row
-                row[add_slack_variable_index] = 1
+                if isinstance(eq, GreaterEqualThan):
+                    row[add_slack_variable_index] = -1
+                else:
+
+                    row[add_slack_variable_index] = 1
             else:
                 raise NotImplementedError
 
             if add_artif_var_idx is not None:
-                row[add_artif_var_idx] = -1
+                row[add_artif_var_idx] = 1
             # row = table[table_row, :]
             # FIXME this adds a slack variable for each row.
         else:

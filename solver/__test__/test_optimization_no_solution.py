@@ -14,7 +14,7 @@ class Test(unittest.TestCase):
         table = self.tb.get()
 
         rows = list(table.table)
-        self.assertEqual(list(rows[0]), [-1.0, -1.0, 1.0, 0.0, -1.0, -1.5])
+        self.assertEqual(list(rows[0]), [1.0, 1.0, -1.0, 0.0, 1.0, 1.5])
         self.assertEqual(list(rows[1]), [1.0, 1.0, 0.0, 1.0, 0.0, 1.0])
 
     def test_run_for_solution(self):

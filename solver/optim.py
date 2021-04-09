@@ -84,12 +84,34 @@ class Optimization:
     @staticmethod
     def run_simplex(table, var_names, initial_base_var_indicies):
         base_indices = initial_base_var_indicies
-        while is_not_final_tableau_r(table):
-            table, piv_pos = Optimization.do_simplex_step(table)
-            base_indices[piv_pos[0]] = piv_pos[1]
+        # print(base_indices)
+
+        # assert base_variables_are_zero_in_objective_function(table)
+        #print(initial_base_var_indicies, )
+        for i in initial_base_var_indicies:
+            obj_fct_val = table[-1, i]
+            if obj_fct_val != 0:
+                #print("NEED TO REARRANGE...")
+                #print(obj_fct_val)
+                a = table[base_indices.index(i), :]
+                #print(a)
+                b = table[-1, :]
+                #print(b)
+                table[-1, :] = b - obj_fct_val * a
+                # exit()
+            assert table[-1, i] == 0
+
+        # print(table[-1, :-1])
+        # exit()
+        # assert table[-1, :-1]
+
+        #while is_not_final_tableau_r(table):
+        #    table, piv_pos = Optimization.do_simplex_step(table)
+        #    base_indices[piv_pos[0]] = piv_pos[1]
 
         while is_not_final_tableau(table):
             table, piv_pos = Optimization.do_simplex_step2(table)
+
             base_indices[piv_pos[0]] = piv_pos[1]
 
         return table, base_indices
@@ -97,7 +119,6 @@ class Optimization:
     def run(self, tableau: PlainTableau):
         # INTIALIZE BASE SOLUTION (INDICES / COLUMN IN TABLE).
         initial_solution = tableau.base_var_indices
-
         try:
             final_table, final_base = self.run_simplex(tableau.table, tableau.var_names, initial_solution)
         except UnboundedTableau:

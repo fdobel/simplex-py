@@ -14,7 +14,7 @@ class Test(unittest.TestCase):
 
     def test_example2(self):
         result, sol = Optimization.max(self.tableau)
-        self.assertEqual(result, 104.15662650602411)
+        self.assertAlmostEqual(result, 104.15662650602411, places=7)
         self.assertEqual(sol['x_1'], 5.650602)
         self.assertEqual(sol['x_2'], 13.26506)
 
