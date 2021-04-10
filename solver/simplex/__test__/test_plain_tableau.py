@@ -2,6 +2,7 @@
 import unittest
 
 from solver.__test__.factories import tableau_1
+from solver.optim import Optimization
 from solver.simplex.plain_tableau import PlainTableau
 from solver.simplex.solution import VariableValues
 
@@ -16,6 +17,14 @@ class Test(unittest.TestCase):
 
         self.assertEqual(var_names, ['x_1', 'x_2', '_s_1', '_s_2', '_a_1'])
         self.assertEqual(list(coeffs), [-5., -10., 0., 0., 1000.])
+
+    def test_canonical(self):
+        self.assertEqual(self.tableau.is_canonical(), False)
+
+    def test_make_canonical(self):
+        t = Optimization._to_canonical(self.tableau.table, self.tableau.base_var_indices)
+        tbl = PlainTableau(t, self.tableau.var_names, self.tableau._model_vars, self.tableau.base_var_indices)
+        self.assertEqual(tbl.is_canonical(), True)
 
     def test_model_vars(self):
         self.assertEqual(self.tableau.model_vars, 2)

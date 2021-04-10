@@ -81,30 +81,21 @@ class Optimization:
 
         table = Optimization._to_canonical(table, base_indices)
 
-        """
-        while is_not_final_tableau_r(table):
-            table, piv_pos = Optimization.do_simplex_step(table)
-            base_indices[piv_pos[0]] = piv_pos[1]
-            sol = table_solution_from_base_indices(table, var_names, base_indices)
-            yield sol
-        """
-
         while is_not_final_tableau(table):
             table, piv_pos = Optimization.simplex_step(table)
             base_indices[piv_pos[0]] = piv_pos[1]
             sol = table_solution_from_base_indices(table, var_names, base_indices)
-            yield sol  # tableau_solution(table, var_names=var_names)
+            yield sol
 
         return table
 
     @staticmethod
-    def run_simplex(table, var_names, base_indices):
+    def full_simplex(table, var_names, base_indices):
         # assert base_variables_are_zero_in_objective_function(table)
         table = Optimization._to_canonical(table, base_indices)
 
         while is_not_final_tableau(table):
             table, piv_pos = Optimization.simplex_step(table)
-
             base_indices[piv_pos[0]] = piv_pos[1]
 
         return table, base_indices
@@ -113,7 +104,7 @@ class Optimization:
         # INTIALIZE BASE SOLUTION (INDICES / COLUMN IN TABLE).
         initial_solution = tableau.base_var_indices
         try:
-            final_table, final_base = self.run_simplex(tableau.table, tableau.var_names, initial_solution)
+            final_table, final_base = self.full_simplex(tableau.table, tableau.var_names, initial_solution)
         except UnboundedTableau:
             return "unbounded", tableau.table
 

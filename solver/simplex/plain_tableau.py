@@ -39,6 +39,20 @@ class PlainTableau:
     def var_names(self):
         return self._var_names
 
+    def is_canonical(self):
+        """
+        checks whether all base index variables equal zero in objective function
+        :return:
+        """
+        is_canonical = True
+        for i in self._base_var_indices:
+
+            obj_fct_val = self.table[-1, i]
+            if obj_fct_val != 0:
+                is_canonical = False
+
+        return is_canonical
+
     def convert_min(self):
         table = self.table
         table[LAST_ROW_IDX, :-2] = [-1 * i for i in table[-1, :-2]]

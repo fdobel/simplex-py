@@ -19,7 +19,7 @@ class Test(unittest.TestCase):
 
     def test_run_for_solution(self):
         t = self.tb.get()
-        result_table, res_base_indices = Optimization().run_simplex(t.table, t.var_names, t.base_var_indices)
+        result_table, res_base_indices = Optimization().full_simplex(t.table, t.var_names, t.base_var_indices)
 
         tabl = PlainTableau(
             result_table,
