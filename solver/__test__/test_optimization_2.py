@@ -21,7 +21,7 @@ class Test(unittest.TestCase):
     def test_iteration(self):
         res = [i for i in
                Optimization.run_simplex_iteratively(
-                   self.tableau.table, var_names=self.tableau.var_names, initial_base_indices=[6, 7, 4, 5]
+                   self.tableau.table, var_names=self.tableau.var_names, base_indices=[6, 7, 4, 5]
                )]
 
         self.assertEqual(len(res), 6)

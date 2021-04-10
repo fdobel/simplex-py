@@ -35,34 +35,34 @@ class Test(unittest.TestCase):
     def test_step(self):
         t = self.t3.get()
         # print(t)
-        t2, pp = Optimization.do_simplex_step2(t.table)
+        t2, pp = Optimization.simplex_step(t.table)
 
         res = PlainTableau(t2, var_names=self.var_names, model_vars=['x_1', 'x_2'], base_var_indices=[0, 2, 3]).collect_result()
         self.assertEqual(VariableValues.from_dict({ 'x_1': 8.0, 'x_2': 0}), res)
 
     def test_step_2(self):
         t = self.t3.get()
-        t2, pp = Optimization.do_simplex_step2(t.table)
-        t3, pp = Optimization.do_simplex_step2(t2)
+        t2, pp = Optimization.simplex_step(t.table)
+        t3, pp = Optimization.simplex_step(t2)
 
         res = PlainTableau(t3, var_names=self.var_names, model_vars=['x_1', 'x_2'], base_var_indices=[0, 1, 3]).collect_result()
         self.assertEqual(VariableValues.from_dict({ 'x_1': 6.0, 'x_2': 5.999999999999999}), res)
 
     def test_step_3(self):
         t = self.t3.get()
-        t2, pp = Optimization.do_simplex_step2(t.table)
-        t3, pp = Optimization.do_simplex_step2(t2)
-        t4, pp = Optimization.do_simplex_step2(t3)
+        t2, pp = Optimization.simplex_step(t.table)
+        t3, pp = Optimization.simplex_step(t2)
+        t4, pp = Optimization.simplex_step(t3)
 
         res = PlainTableau(t4, var_names=self.var_names, model_vars=['x_1', 'x_2'], base_var_indices=[0,  1, 4]).collect_result()
         self.assertEqual(VariableValues.from_dict({ 'x_1': 2.9999999999999996, 'x_2': 12.0}), res)
 
     def test_step_4(self):
         t = self.t3.get()
-        t2, pp = Optimization.do_simplex_step2(t.table)
-        t3, pp = Optimization.do_simplex_step2(t2)
-        t4, pp = Optimization.do_simplex_step2(t3)
-        t5, pp = Optimization.do_simplex_step2(t4)
+        t2, pp = Optimization.simplex_step(t.table)
+        t3, pp = Optimization.simplex_step(t2)
+        t4, pp = Optimization.simplex_step(t3)
+        t5, pp = Optimization.simplex_step(t4)
 
         res = PlainTableau(t5, var_names=self.var_names, model_vars=['x_1', 'x_2'], base_var_indices=[0, 1, 4]).collect_result()
         self.assertEqual(VariableValues.from_dict({ 'x_1': 2.9999999999999996, 'x_2': 12.0}), res)

@@ -45,36 +45,52 @@ def compute_new_tableau(piv_pos, old_tableau):
 
 class Optimization:
 
+    """
     @staticmethod
     def do_simplex_step(table):
         piv_pos = find_pivot_from_row(table)
         table = compute_new_tableau(piv_pos, table)
         return table, piv_pos
+    """
 
     @staticmethod
-    def do_simplex_step2(table):
+    def simplex_step(table):
         piv_pos = find_pivot(table)
         table = compute_new_tableau(piv_pos, table)
         return table, piv_pos
 
     @staticmethod
-    def run_simplex_iteratively(table, var_names, initial_base_indices):
-        base_indices = initial_base_indices
-        # initial_solution = tableau_solution(table, var_names=var_names)
+    def _to_canonical(table, base_indices):
+
+        for i in base_indices:
+            obj_fct_val = table[-1, i]
+            if obj_fct_val != 0:
+                a = table[base_indices.index(i), :]
+                b = table[-1, :]
+                table[-1, :] = b - obj_fct_val * a
+            assert table[-1, i] == 0
+
+        return table
+
+    @staticmethod
+    def run_simplex_iteratively(table, var_names, base_indices):
+
         initial_solution = table_solution_from_base_indices(table, var_names, base_indices)
 
         yield initial_solution
-        # print(table)
-        # print(base_indices)
+
+        table = Optimization._to_canonical(table, base_indices)
+
+        """
         while is_not_final_tableau_r(table):
             table, piv_pos = Optimization.do_simplex_step(table)
             base_indices[piv_pos[0]] = piv_pos[1]
             sol = table_solution_from_base_indices(table, var_names, base_indices)
             yield sol
-        # print("--")
+        """
 
         while is_not_final_tableau(table):
-            table, piv_pos = Optimization.do_simplex_step2(table)
+            table, piv_pos = Optimization.simplex_step(table)
             base_indices[piv_pos[0]] = piv_pos[1]
             sol = table_solution_from_base_indices(table, var_names, base_indices)
             yield sol  # tableau_solution(table, var_names=var_names)
@@ -82,35 +98,12 @@ class Optimization:
         return table
 
     @staticmethod
-    def run_simplex(table, var_names, initial_base_var_indicies):
-        base_indices = initial_base_var_indicies
-        # print(base_indices)
-
+    def run_simplex(table, var_names, base_indices):
         # assert base_variables_are_zero_in_objective_function(table)
-        #print(initial_base_var_indicies, )
-        for i in initial_base_var_indicies:
-            obj_fct_val = table[-1, i]
-            if obj_fct_val != 0:
-                #print("NEED TO REARRANGE...")
-                #print(obj_fct_val)
-                a = table[base_indices.index(i), :]
-                #print(a)
-                b = table[-1, :]
-                #print(b)
-                table[-1, :] = b - obj_fct_val * a
-                # exit()
-            assert table[-1, i] == 0
-
-        # print(table[-1, :-1])
-        # exit()
-        # assert table[-1, :-1]
-
-        #while is_not_final_tableau_r(table):
-        #    table, piv_pos = Optimization.do_simplex_step(table)
-        #    base_indices[piv_pos[0]] = piv_pos[1]
+        table = Optimization._to_canonical(table, base_indices)
 
         while is_not_final_tableau(table):
-            table, piv_pos = Optimization.do_simplex_step2(table)
+            table, piv_pos = Optimization.simplex_step(table)
 
             base_indices[piv_pos[0]] = piv_pos[1]
 
