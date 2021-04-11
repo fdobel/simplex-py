@@ -17,11 +17,6 @@ class Constraint:
         return var_names
 
     def __str__(self):
-        #var_names = self._var_names
-        #if var_names is None:
-        #    var_names = ["x_%i" % i for i in range(len(self._coeffs))]
-        # var_names = self.var_names
-
         s = ["%.2f*%s" % (float(c), vn) for vn, c in zip(self.var_names, self._coeffs)]
         return "%s %s %.2f" % (" + ".join(s), self.sign(), self._b)
 

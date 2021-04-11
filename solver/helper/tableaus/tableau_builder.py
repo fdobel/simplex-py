@@ -59,13 +59,9 @@ class TableauBuilder:
         # assert not add_artificial_variable  # FIXME NOT YET IMPLEMENTED
 
         if _can_add_constraint(table):
-            lr, lc = _table_rows_columns(table)
-            var = lc - lr  # number of
 
             row = table[table_row, :]
 
-            # print(var)
-            # print(eq)
             for i in range(len(eq) - 1):
                 if isinstance(eq, GreaterEqualThan):
                     row[i] = -eq[i]
