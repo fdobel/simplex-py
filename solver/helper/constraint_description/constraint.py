@@ -22,17 +22,3 @@ class Constraint:
 
     def __getitem__(self, item):
         return (self._coeffs + [self._b]).__getitem__(item)
-
-class LessEqualThan(Constraint):
-    def sign(self):
-        return "<="
-
-
-class GreaterEqualThan(Constraint):
-    def sign(self):
-        return ">="
-
-
-class Equal(Constraint):
-    def sign(self):
-        return "="

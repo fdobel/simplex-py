@@ -1,4 +1,5 @@
-from solver.helper.constraint_description.constraint import GreaterEqualThan, LessEqualThan
+from solver.helper.constraint_description import GreaterEqualThan
+from solver.helper.constraint_description import LessEqualThan
 
 
 def obj_string_convert(eq):

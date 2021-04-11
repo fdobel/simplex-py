@@ -1,4 +1,4 @@
-from solver.helper.constraint_description.constraint import Constraint, GreaterEqualThan, LessEqualThan
+from solver.helper.constraint_description import GreaterEqualThan, Constraint, LessEqualThan
 from solver.helper.tableau import _can_add_constraint, _table_rows_columns, _can_add_objective
 from solver.simplex.plain_tableau import PlainTableau
 import numpy as np

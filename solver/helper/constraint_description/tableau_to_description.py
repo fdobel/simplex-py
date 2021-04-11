@@ -1,4 +1,4 @@
-from solver.helper.constraint_description.constraint import LessEqualThan
+from solver.helper.constraint_description import LessEqualThan
 from solver.helper.constraint_description.objective import Max, Objective
 from solver.simplex.plain_tableau import PlainTableau
 
