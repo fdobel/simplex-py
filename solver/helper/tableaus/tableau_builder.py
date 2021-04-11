@@ -19,6 +19,12 @@ class TableauBuilder:
         # self.row_counter = 0
         self._result_table = None
 
+        self._big_m_value = 1000
+
+    def with_big_m(self, m):
+        self._big_m_value = m
+        return self
+
     def with_var_names(self, var_name_array):
         self._var_names = var_name_array
         return self
@@ -91,7 +97,7 @@ class TableauBuilder:
         return table
 
     @staticmethod
-    def _build_objective(table, eq, bigm_indices, optim_direction):
+    def _build_objective(table, eq, bigm_indices, optim_direction, big_m):
         # table = self.table
         if _can_add_objective(table):
             # eq = simple_convert(eq)
@@ -106,7 +112,7 @@ class TableauBuilder:
                 i += 1
 
             for idx in bigm_indices:
-                M = 1000
+                M = big_m
                 row[idx] = M
             # row[-2] = 1 # FIXME. This does not seem necessary and might even be wrong. Find explanation.
             row[-1] = eq[-1]
@@ -140,11 +146,6 @@ class TableauBuilder:
 
             c = constraint_description['constraint']
 
-            if isinstance(c, GreaterEqualThan):
-                pass
-            if isinstance(c, LessEqualThan):
-                pass
-
             added_artif = False
             if constraint_description['add_artificial_variable']:
                 artif_var_idx = self.no_vars + number_of_slack_variables + artif_var_count
@@ -174,14 +175,13 @@ class TableauBuilder:
                         range(self.no_vars + number_of_slack_variables,
                               self.no_vars + number_of_slack_variables + number_of_artificial_variables)
                         ]
-        self._table = TableauBuilder._build_objective(self._table, self.objective, bigm_indices, optim)
+        self._table = TableauBuilder._build_objective(self._table, self.objective, bigm_indices, optim, self._big_m_value)
 
         if self._var_names is None:
             vnames = ["x_%i" % (i+1) for i in range(self.no_vars)] + slack_vars + artif_vars
         else:
             vnames = self._var_names + slack_vars + artif_vars
 
-        #base_vars = [vnames[idx] for idx in base_var_idxs]
         return PlainTableau(
             self._table, var_names=vnames,
             model_vars=[vnames[i] for i in range(self.no_vars)],
