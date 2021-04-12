@@ -39,12 +39,7 @@ class TableauBuilder:
         if self.no_vars is None:
             self.no_vars = len(constraint) - 1
 
-        # right_side = constraint[len(constraint) - 1]
-        # print(constraint, constraint[-1])
-
-        self.constraints.append({'constraint': constraint,
-                                 'add_artificial_variable': isinstance(constraint, GreaterEqualThan)
-                                 })
+        self.constraints.append(constraint)
         return self
 
     def set_objective(self, objective):
@@ -53,43 +48,34 @@ class TableauBuilder:
         return self
 
     @staticmethod
-    def _build_constraint(table, eq, table_row, add_slack_variable_index, add_artif_var_idx):
-
+    def _build_constraint(eq, add_slack_variable_index, add_artif_var_idx, row_len):
+        assert add_slack_variable_index is not None
         # assert not add_artificial_variable  # FIXME NOT YET IMPLEMENTED
 
-        if _can_add_constraint(table):
+        # init new row
+        row = np.zeros(row_len)
 
-            row = table[table_row, :]
-
-            for i in range(len(eq) - 1):
-                if isinstance(eq, GreaterEqualThan):
-                    row[i] = -eq[i]
-                else:
-                    row[i] = eq[i]
-
-            if isinstance(eq, GreaterEqualThan):
-                row[-1] = -eq[-1]
-            else:
-                row[-1] = eq[-1]
-
-            if add_slack_variable_index is not None:
-                # slack_var_idx = var + table_row
-                if isinstance(eq, GreaterEqualThan):
-                    row[add_slack_variable_index] = -1
-                else:
-
-                    row[add_slack_variable_index] = 1
-            else:
-                raise NotImplementedError
-
-            if add_artif_var_idx is not None:
-                row[add_artif_var_idx] = 1
-            # row = table[table_row, :]
-            # FIXME this adds a slack variable for each row.
+        if isinstance(eq, GreaterEqualThan):
+            slack_variable_factor = -1
+        elif isinstance(eq, LessEqualThan):
+            slack_variable_factor = 1
         else:
-            raise AttributeError('Cannot add another constraint.')
+            raise AttributeError
 
-        return table
+        # copy equation left side
+        for i in range(len(eq) - 1):
+            row[i] = eq[i]
+
+        # set slack variable at index
+        row[add_slack_variable_index] = slack_variable_factor
+
+        # set artificial variable if necessary
+        if add_artif_var_idx is not None:
+            row[add_artif_var_idx] = 1
+
+        row[-1] = eq[-1]  # right side.
+
+        return row
 
     @staticmethod
     def _build_objective(table, eq, bigm_indices, optim_direction, big_m):
@@ -115,79 +101,89 @@ class TableauBuilder:
             print('You must finish adding constraints before the objective function can be added.')
         return table
 
-    def get(self, optim="max"):
+    def init_needed_variables(self):
         n_const = len(self.constraints)
 
         model_variable_indices = [idx for idx in range(self.no_vars)]
-        # print("mv:", model_variable_indices)
 
+        # add slack variable for each constraint (all constraints equal to right side)
         number_of_slack_variables = n_const
-        slack_variable_indices = \
-            [idx+self.no_vars for idx in range(number_of_slack_variables)]
-        # print("sv:", slack_variable_indices)
 
-        number_of_artificial_variables = len([c for c in self.constraints if c['add_artificial_variable']])
+        # SLACK VARIABLES
+        slack_variable_indices = \
+            [idx+self.no_vars for idx in range(n_const)]
+        constraint_idx_to_slack_var_idx = {
+            idx: idx + self.no_vars for idx in range(n_const)
+        }
+
+        # ARTIFICIAL VARIABLES
+        greater_equal_constraints_indices = [
+            idx for idx, c in enumerate(self.constraints) if isinstance(c, GreaterEqualThan)
+        ]
+        number_of_artificial_variables = len(greater_equal_constraints_indices)
         artificial_variable_indices = \
-            [idx+self.no_vars+number_of_slack_variables for idx in range(number_of_artificial_variables)]
-        # print("av:", artificial_variable_indices)
+            [
+                artif_var_idx+self.no_vars+number_of_slack_variables
+                for artif_var_idx, constraint_idx in enumerate(greater_equal_constraints_indices)
+            ]
+        constraint_idx_to_artificial_idx = {}
+        art_c = 0
+        for c_idx, c in enumerate(self.constraints):
+            if isinstance(c, GreaterEqualThan):
+                constraint_idx_to_artificial_idx[c_idx] = self.no_vars + number_of_slack_variables + art_c
+                art_c += 1
 
         artif_vars = ["_a_%i" % (i+1) for i in range(number_of_artificial_variables)]
-
-        # assert number_of_artificial_variables == 0
-        # FIXME assumption here: each constraint function adds a slack variable (columns: + self.cons.)
         slack_vars = ["_s_%i" % (i+1) for i in range(number_of_slack_variables)]
 
         self._table = np.zeros((n_const + 1, self.no_vars + number_of_slack_variables + number_of_artificial_variables + 1))
         # the table will contain one row for each constraint + 1 for the objective function
         # one column will be added for the right side
 
-        row_count = 0
-        artif_var_count = 0
-        slack_var_count = 0
-        base_var_idxs = []
-
-
-
-
-        for constraint_description in self.constraints:
-
-            c = constraint_description['constraint']
-
-            added_artif = False
-            if constraint_description['add_artificial_variable']:
-                artif_var_idx = self.no_vars + number_of_slack_variables + artif_var_count
-                # add artifvar to initial base
-                base_var_idxs.append(artif_var_idx)
-
-                artif_var_count += 1
-                added_artif = True
-            else:
-                artif_var_idx = None
-
-            # if constraint_description['add_slack_variable']:
-            slack_var_idx = self.no_vars + slack_var_count
-            if not added_artif:
-                base_var_idxs.append(slack_var_idx)
-
-            slack_var_count += 1
-            #else:
-            #    slack_var_idx = None
-
-            self._table = TableauBuilder._build_constraint(
-                self._table, c, row_count, slack_var_idx, artif_var_idx
-            )
-            row_count += 1
-
-        bigm_indices = [i for i in
-                        range(self.no_vars + number_of_slack_variables,
-                              self.no_vars + number_of_slack_variables + number_of_artificial_variables)
-                        ]
-        self._table = TableauBuilder._build_objective(self._table, self.objective, bigm_indices, optim, self._big_m_value)
-
         if self._var_names is None:
             vnames = ["x_%i" % (i+1) for i in range(self.no_vars)] + slack_vars + artif_vars
         else:
             vnames = self._var_names + slack_vars + artif_vars
+
+        variable_indices = [(index, 'model') for index in model_variable_indices] + \
+                           [(index, 'slack') for index in slack_variable_indices] + \
+                           [(index, 'artificial') for index in artificial_variable_indices]
+        variable_descriptions = [(idx, name, typ_) for (idx, typ_), name in zip(variable_indices, vnames)]
+
+        return constraint_idx_to_slack_var_idx, constraint_idx_to_artificial_idx, variable_descriptions
+
+
+
+    def get(self, optim="max"):
+
+        constraint_idx_to_slack_var_idx, \
+            constraint_idx_to_artificial_idx, \
+            variable_descriptions = self.init_needed_variables()
+        vnames = [name for idx, name, _ in variable_descriptions]
+
+        base_var_idxs = []
+        for constraint_idx, c in enumerate(self.constraints):
+
+            # get slack variable (index) for constraint
+            slack_var_idx = constraint_idx_to_slack_var_idx[constraint_idx]
+
+            if isinstance(c, GreaterEqualThan):  # add artificial variable.
+                artif_var_idx = constraint_idx_to_artificial_idx[constraint_idx]
+                # add artifvar to initial base
+                base_var_idxs.append(artif_var_idx)
+            elif isinstance(c, LessEqualThan):
+                base_var_idxs.append(slack_var_idx)
+                artif_var_idx = None
+            else:
+                raise AttributeError
+
+            new_row = TableauBuilder._build_constraint(
+                c, slack_var_idx, artif_var_idx, len(self._table[-1, :])
+            )
+            self._table[constraint_idx, :] = new_row
+
+        bigm_indices = [indx for indx, name, typ_ in variable_descriptions if typ_ == "artificial"]
+        self._table = TableauBuilder._build_objective(self._table, self.objective, bigm_indices, optim, self._big_m_value)
 
         return PlainTableau(
             self._table, var_names=vnames,

@@ -11,7 +11,7 @@ def constr_string_convert(eq):
     if '>=' in eq:
         g = eq.index('>=')
         del eq[g]
-        eq = [float(i)*-1 for i in eq]
+        eq = [float(i) for i in eq]
         return GreaterEqualThan(eq[:-1], eq[-1])
     if '<=' in eq:
         l = eq.index('<=')
