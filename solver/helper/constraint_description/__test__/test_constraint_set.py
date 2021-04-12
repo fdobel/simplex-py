@@ -29,7 +29,8 @@ class Test(unittest.TestCase):
         self.assertEqual(
             str(self.cs),
             "0.00*x_0 + 1.00*x_1 + 2.00*x_2 >= 42.00\n"
-            "0.00*x_0 + 1.00*x_1 + 2.00*x_2 <= 42.00"
+            "0.00*x_0 + 1.00*x_1 + 2.00*x_2 <= 42.00\n"
+            "all variables positive"
         )
 
     def test_unique_vars(self):

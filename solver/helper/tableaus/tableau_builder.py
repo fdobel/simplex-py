@@ -33,18 +33,17 @@ class TableauBuilder:
     def table(self):
         return self._table
 
-    def add_constraint(self, constraint: Constraint, add_slack_variable=True):
+    def add_constraint(self, constraint: Constraint):
 
         assert self.no_vars is None or (len(constraint) == self.no_vars + 1)
         if self.no_vars is None:
             self.no_vars = len(constraint) - 1
 
-        right_side = constraint[len(constraint) - 1]
-
+        # right_side = constraint[len(constraint) - 1]
+        # print(constraint, constraint[-1])
 
         self.constraints.append({'constraint': constraint,
-                                 'add_slack_variable': add_slack_variable,
-                                 'add_artificial_variable': right_side < 0
+                                 'add_artificial_variable': isinstance(constraint, GreaterEqualThan)
                                  })
         return self
 
@@ -119,9 +118,18 @@ class TableauBuilder:
     def get(self, optim="max"):
         n_const = len(self.constraints)
 
-        number_of_slack_variables = len([c for c in self.constraints if c['add_slack_variable']])
+        model_variable_indices = [idx for idx in range(self.no_vars)]
+        # print("mv:", model_variable_indices)
+
+        number_of_slack_variables = n_const
+        slack_variable_indices = \
+            [idx+self.no_vars for idx in range(number_of_slack_variables)]
+        # print("sv:", slack_variable_indices)
 
         number_of_artificial_variables = len([c for c in self.constraints if c['add_artificial_variable']])
+        artificial_variable_indices = \
+            [idx+self.no_vars+number_of_slack_variables for idx in range(number_of_artificial_variables)]
+        # print("av:", artificial_variable_indices)
 
         artif_vars = ["_a_%i" % (i+1) for i in range(number_of_artificial_variables)]
 
@@ -138,6 +146,9 @@ class TableauBuilder:
         slack_var_count = 0
         base_var_idxs = []
 
+
+
+
         for constraint_description in self.constraints:
 
             c = constraint_description['constraint']
@@ -153,14 +164,14 @@ class TableauBuilder:
             else:
                 artif_var_idx = None
 
-            if constraint_description['add_slack_variable']:
-                slack_var_idx = self.no_vars + slack_var_count
-                if not added_artif:
-                    base_var_idxs.append(slack_var_idx)
+            # if constraint_description['add_slack_variable']:
+            slack_var_idx = self.no_vars + slack_var_count
+            if not added_artif:
+                base_var_idxs.append(slack_var_idx)
 
-                slack_var_count += 1
-            else:
-                slack_var_idx = None
+            slack_var_count += 1
+            #else:
+            #    slack_var_idx = None
 
             self._table = TableauBuilder._build_constraint(
                 self._table, c, row_count, slack_var_idx, artif_var_idx

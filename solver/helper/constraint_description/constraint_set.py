@@ -1,18 +1,24 @@
 from typing import List, Dict
 
 from solver.helper.constraint_description import Constraint
+from solver.helper.constraint_description.conventions import PositiveVariables
 
 
 class ConstraintSet:
 
-    def __init__(self, constraints: List[Constraint], var_types=None):
+    def __init__(self, constraints: List[Constraint], var_types=None, conventions=[PositiveVariables]):
         if var_types is None:
             var_types = {}
         self._constraints = constraints
         self._var_types = var_types
+        self._conventions = conventions
 
     def __len__(self):
         return self._constraints.__len__()
+
+    def __iter__(self):
+        for constr in self._constraints:
+            yield constr
 
     def unique_vars(self):
         s = set()
@@ -39,4 +45,7 @@ class ConstraintSet:
         return self.__type_variables("artificial")
 
     def __str__(self):
-        return "\n".join("%s" % c for c in self._constraints)
+        s = "\n".join("%s" % c for c in self._constraints)
+        if PositiveVariables in self._conventions:
+            s += "\n" + "all variables positive"
+        return s
