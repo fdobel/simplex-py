@@ -10,13 +10,6 @@ class Test(unittest.TestCase):
         from .factories import tableau_1
         self.tableau_builder = tableau_1()
 
-    #def test_example1(self):
-    #    tableau = self.tableau_builder.get(enable_artif_vars=False)
-    #    result, sol = Optimization.min(tableau)
-    #    self.assertEqual(result, 25.0)
-    #    self.assertEqual(sol['x1'], 5.0)
-    #    self.assertEqual(sol['x2'], 0)
-
     def test_example_min(self):
         tableau = self.tableau_builder.get(optim="max")
         result, sol = Optimization.max(tableau)

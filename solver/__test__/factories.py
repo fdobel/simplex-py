@@ -2,7 +2,7 @@ from solver.helper.tableaus.read_from_files import builder_from_file
 
 
 def tableau_1():
-    return  builder_from_file("__test__/program1.lp")
+    return builder_from_file("__test__/program1.lp")
 
 
 def tableau_2():

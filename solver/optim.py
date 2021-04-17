@@ -18,8 +18,11 @@ def _round_result(val):
 def compute_new_tableau(piv_pos, old_tableau):
     piv_row_idx, piv_col_idx = piv_pos
 
-    lr = len(old_tableau[:, 0])
-    lc = len(old_tableau[0, :])
+    lr, lc = old_tableau.shape
+
+    # lr = len(old_tableau[:, 0])
+    # lc = len(old_tableau[0, :])
+
     new_tableau = np.zeros((lr, lc))
     pivot_row = old_tableau[piv_row_idx, :]
 
@@ -44,6 +47,9 @@ def compute_new_tableau(piv_pos, old_tableau):
 
 
 class Optimization:
+
+    def __init__(self, tableau: PlainTableau):
+        self._tableau = tableau
 
     """
     @staticmethod
@@ -89,8 +95,7 @@ class Optimization:
 
         return table
 
-    @staticmethod
-    def full_simplex(table, var_names, base_indices):
+    def _full_simplex(self, table, var_names, base_indices):
         # assert base_variables_are_zero_in_objective_function(table)
         table = Optimization._to_canonical(table, base_indices)
 
@@ -100,11 +105,12 @@ class Optimization:
 
         return table, base_indices
 
-    def run(self, tableau: PlainTableau):
+    def run(self):
         # INTIALIZE BASE SOLUTION (INDICES / COLUMN IN TABLE).
+        tableau = self._tableau
         initial_solution = tableau.base_var_indices
         try:
-            final_table, final_base = self.full_simplex(tableau.table, tableau.var_names, initial_solution)
+            final_table, final_base = self._full_simplex(tableau.table, tableau.var_names, initial_solution)
         except UnboundedTableau:
             return "unbounded", tableau.table
 
@@ -117,7 +123,7 @@ class Optimization:
 
     @classmethod
     def max(cls, table: PlainTableau, output='summary'):
-        val, table = Optimization().run(table)
+        val, table = Optimization(table).run()
 
         if output == 'table':
             return table
@@ -132,7 +138,7 @@ class Optimization:
 
     @classmethod
     def min(cls, tableau: PlainTableau, output='summary'):
-        val, table = Optimization().run(tableau.convert_min())
+        val, table = Optimization(tableau.convert_min()).run()
 
         if output == 'table':
             return table

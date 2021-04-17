@@ -12,7 +12,7 @@ class Test(unittest.TestCase):
         from .factories import tableau_2
         self.tableau = tableau_2().get()
 
-    def test_example2(self):
+    def test_max(self):
         result, sol = Optimization.max(self.tableau)
         self.assertAlmostEqual(result, 104.15662650602411, places=7)
         self.assertEqual(sol['x_1'], 5.650602)
