@@ -8,8 +8,8 @@ from solver.optim import Optimization
 class Test(unittest.TestCase):
 
     def setUp(self):
-        from .factories import tableau_6
-        self.tb = tableau_6()
+        from .factories import tableau_5
+        self.tb = tableau_5()
 
     def test_output(self):
         table = self.tb.get()

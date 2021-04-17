@@ -3,8 +3,7 @@ from solver.helper.constraint_description import GreaterEqualThan, LessEqualThan
 from solver.helper.tableaus import TableauBuilder
 
 
-
-def tableau_from_file(filepath):
+def builder_from_file(filepath):
 
     obj, constraints = read(filepath)
 
@@ -18,4 +17,8 @@ def tableau_from_file(filepath):
             raise NotImplementedError
 
     builder.set_objective(obj + [0])
-    return builder.get()
+    return builder
+
+
+def tableau_from_file(filepath):
+    return builder_from_file(filepath).get()

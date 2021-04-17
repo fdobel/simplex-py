@@ -6,7 +6,7 @@ from solver.helper.tableaus.read_from_files import tableau_from_file
 class Test(unittest.TestCase):
 
     def test_str(self):
-        t = tableau_from_file("solver/helper/tableaus/__test__/program1.lp")
+        t = tableau_from_file("__test__/program_0.lp")
         self.assertEqual(
             str(t),
             "[x_1, x_2, x_3, x_4, x_5, _s_1]\n"
