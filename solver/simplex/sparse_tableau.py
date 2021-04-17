@@ -59,19 +59,15 @@ class PlainTableau:
         return PlainTableau(
             table, var_names=self.var_names,
             model_vars=self._model_vars, base_var_indices=self._base_var_indices)
-
+    """
     def collect_result(self) -> VariableValues:
-        from solver.simplex.get_tableau_solution import init_tableau_solution, table_solution_from_base_indices
-        # val = init_tableau_solution(self, var_names=self.var_names)
+        from solver.simplex.get_tableau_solution import table_solution_from_base_indices
         val = table_solution_from_base_indices(self.table, self.var_names, self.base_var_indices)
-
         return VariableValues(self._model_vars, [(val[m] if m in val else 0) for m in self._model_vars])
-        # return val
-
+    """
     def intermediate_solution(self) -> VariableValues:
         from solver.simplex.get_tableau_solution import table_solution_from_base_indices
         val = table_solution_from_base_indices(self.table, self._var_names, self.base_var_indices)
-        # val = tableau_solution(self.table, var_names=self.var_names)
         return val
 
     def __str__(self):

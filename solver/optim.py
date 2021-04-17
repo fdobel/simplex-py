@@ -1,6 +1,6 @@
 
-from solver.pivoting.pivot import find_pivot_from_row, find_pivot
-from solver.pivoting.table_functions import is_not_final_tableau_r, is_not_final_tableau
+from solver.pivoting.pivot import find_pivot
+from solver.pivoting.table_functions import is_not_final_tableau
 
 import numpy as np
 
@@ -95,7 +95,8 @@ class Optimization:
 
         return table
 
-    def _full_simplex(self, table, var_names, base_indices):
+    def _full_simplex(self, var_names, base_indices):
+        table = self._tableau.table
         # assert base_variables_are_zero_in_objective_function(table)
         table = Optimization._to_canonical(table, base_indices)
 
@@ -110,7 +111,7 @@ class Optimization:
         tableau = self._tableau
         initial_solution = tableau.base_var_indices
         try:
-            final_table, final_base = self._full_simplex(tableau.table, tableau.var_names, initial_solution)
+            final_table, final_base = self._full_simplex(tableau.var_names, initial_solution)
         except UnboundedTableau:
             return "unbounded", tableau.table
 

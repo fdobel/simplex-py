@@ -1,5 +1,6 @@
 import unittest
-from solver.helper.convert import constr_string_convert, obj_string_convert
+
+from solver.helper.constraint_description import LessEqualThan
 from solver.helper.tableaus import TableauBuilder
 
 from solver.optim import Optimization
@@ -11,10 +12,10 @@ class Test(unittest.TestCase):
 
     def setUp(self):
         self.t3 = TableauBuilder()
-        self.t3.add_constraint(constr_string_convert('2,1,<=,18'))
-        self.t3.add_constraint(constr_string_convert('2,3,<=,42'))
-        self.t3.add_constraint(constr_string_convert('3,1,<=,24'))
-        self.t3.set_objective(obj_string_convert('3,2,0'))
+        self.t3.add_constraint(LessEqualThan([2, 1], 18))
+        self.t3.add_constraint(LessEqualThan([2, 3], 42))
+        self.t3.add_constraint(LessEqualThan([3, 1], 24))
+        self.t3.set_objective([3, 2, 0])
 
         self.var_names = ['x_1', 'x_2', '_s_1', '_s_2', '_s_3']
 

@@ -1,5 +1,4 @@
 from solver.helper.constraint_description import GreaterEqualThan, Constraint, LessEqualThan
-from solver.helper.tableau import _can_add_constraint, _table_rows_columns, _can_add_objective
 from solver.simplex.plain_tableau import PlainTableau
 import numpy as np
 
@@ -79,26 +78,22 @@ class TableauBuilder:
 
     @staticmethod
     def _build_objective(table, eq, bigm_indices, optim_direction, big_m):
-        # table = self.table
-        if _can_add_objective(table):
-            # eq = simple_convert(eq)
-            lr = len(table[:, 0])
-            row = table[lr - 1, :]
-            i = 0
-            while i < len(eq) - 1:
-                if optim_direction == "max":
-                    row[i] = eq[i] * -1
-                else:
-                    row[i] = eq[i]
-                i += 1
+        lr = len(table[:, 0])
+        row = table[lr - 1, :]
+        i = 0
+        while i < len(eq) - 1:
+            if optim_direction == "max":
+                row[i] = eq[i] * -1
+            else:
+                row[i] = eq[i]
+            i += 1
 
-            for idx in bigm_indices:
-                M = big_m
-                row[idx] = M
-            # row[-2] = 1 # FIXME. This does not seem necessary and might even be wrong. Find explanation.
-            row[-1] = eq[-1]
-        else:
-            print('You must finish adding constraints before the objective function can be added.')
+        for idx in bigm_indices:
+            M = big_m
+            row[idx] = M
+
+        # row[-2] = 1 # FIXME. This does not seem necessary and might even be wrong. Find explanation.
+        row[-1] = eq[-1]
         return table
 
     def init_needed_variables(self):
