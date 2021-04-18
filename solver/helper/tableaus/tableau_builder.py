@@ -1,4 +1,4 @@
-from solver.helper.constraint_description import GreaterEqualThan, Constraint, LessEqualThan
+from constraint_description import GreaterEqualThan, Constraint, LessEqualThan
 from solver.simplex.plain_tableau import PlainTableau
 import numpy as np
 
@@ -15,7 +15,6 @@ class TableauBuilder:
 
         self._var_names = None
 
-        # self.row_counter = 0
         self._result_table = None
 
         self._big_m_value = 1000
@@ -42,8 +41,8 @@ class TableauBuilder:
         return self
 
     def set_objective(self, objective):
-        assert len(objective) == self.no_vars + 1
-        self.objective = objective
+        assert len(objective) == self.no_vars
+        self.objective = objective + [0]
         return self
 
     @staticmethod

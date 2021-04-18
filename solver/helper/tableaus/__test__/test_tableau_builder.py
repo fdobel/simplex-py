@@ -2,7 +2,7 @@
 
 import unittest
 
-from solver.helper.constraint_description import GreaterEqualThan, LessEqualThan
+from constraint_description import GreaterEqualThan
 from .. import TableauBuilder
 
 
@@ -13,7 +13,7 @@ class Test(unittest.TestCase):
 
         self.tableau = builder\
             .add_constraint(GreaterEqualThan([2, 5], 30))\
-            .set_objective([5,10,0])\
+            .set_objective([5,10])\
             .with_var_names(["t1", "t2"])\
             .get()
         self.assertEqual(

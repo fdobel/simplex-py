@@ -1,5 +1,5 @@
 from lp_reader.read import read
-from solver.helper.constraint_description import GreaterEqualThan, LessEqualThan
+from constraint_description import GreaterEqualThan, LessEqualThan
 from solver.helper.tableaus import TableauBuilder
 
 
@@ -16,7 +16,7 @@ def builder_from_file(filepath):
         else:
             raise NotImplementedError
 
-    builder.set_objective(obj + [0])
+    builder.set_objective(obj)
     return builder
 
 

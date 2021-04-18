@@ -1,6 +1,6 @@
 import unittest
 
-from solver.helper.constraint_description import LessEqualThan
+from constraint_description import LessEqualThan
 from solver.helper.tableaus import TableauBuilder
 
 from solver.optim import Optimization
@@ -15,7 +15,7 @@ class Test(unittest.TestCase):
         self.t3.add_constraint(LessEqualThan([2, 1], 18))
         self.t3.add_constraint(LessEqualThan([2, 3], 42))
         self.t3.add_constraint(LessEqualThan([3, 1], 24))
-        self.t3.set_objective([3, 2, 0])
+        self.t3.set_objective([3, 2])
 
         self.var_names = ['x_1', 'x_2', '_s_1', '_s_2', '_s_3']
 

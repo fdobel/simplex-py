@@ -1,6 +1,6 @@
 import unittest
 
-from solver.helper.constraint_description import LessEqualThan, GreaterEqualThan
+from constraint_description import LessEqualThan, GreaterEqualThan
 from solver.helper.tableaus import TableauBuilder
 
 from solver.pivoting.pivot import find_pivot
@@ -14,7 +14,7 @@ class Test(unittest.TestCase):
             add_constraint(GreaterEqualThan([-3,  5], 5)).\
             add_constraint(LessEqualThan([8, 3], 85)).\
             add_constraint(LessEqualThan([-9, 7], 42)).\
-            set_objective([2, 7, 0]).get()
+            set_objective([2, 7]).get()
     """
     @unittest.skip
     def test_pivot_step_0(self):

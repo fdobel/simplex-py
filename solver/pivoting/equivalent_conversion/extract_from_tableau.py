@@ -1,5 +1,5 @@
-from solver.helper.constraint_description import LessEqualThan
-from solver.helper.constraint_description.objective import Max, Min
+from constraint_description import LessEqualThan
+from constraint_description import Min
 from solver.simplex.plain_tableau import PlainTableau
 
 

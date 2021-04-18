@@ -1,6 +1,6 @@
 import unittest
 
-from solver.helper.constraint_description.constraint_set import ConstraintSet
+from constraint_description import ConstraintSet
 from .. import GreaterEqualThan, LessEqualThan
 
 

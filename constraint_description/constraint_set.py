@@ -1,15 +1,16 @@
-from typing import List, Dict
+from typing import List
 
-from solver.helper.constraint_description import Constraint
-from solver.helper.constraint_description.conventions import PositiveVariables
+from constraint_description import Constraint
+from constraint_description.conventions import PositiveVariables
 
 
 class ConstraintSet:
 
-    def __init__(self, constraints: List[Constraint], var_types=None, conventions=[PositiveVariables]):
+    def __init__(self, constraints: List[Constraint], variable_constraints: List=[], var_types=None, conventions=[PositiveVariables]):
         if var_types is None:
             var_types = {}
         self._constraints = constraints
+        self._var_constraints = variable_constraints
         self._var_types = var_types
         self._conventions = conventions
 
