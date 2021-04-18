@@ -76,7 +76,7 @@ def tableau_solution(table, var_names=None):
 
 
 def init_var_names(tableau: PlainTableau):
-    n_model_variables = tableau.model_vars
+    n_model_variables = len(tableau.model_vars)
     v = []
     for i in range(n_model_variables):
         v.append('x' + str(i + 1))

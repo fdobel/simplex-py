@@ -5,8 +5,8 @@ from solver.optim import Optimization
 class Test(unittest.TestCase):
 
     def setUp(self):
-        from .factories import tableau_5
-        self.tb = tableau_5()
+        from solver.helper.tableaus.read_from_files import builder_from_file
+        self.tb = builder_from_file("__test__/program5.lp")
 
     def test_output(self):
         table = self.tb.get()

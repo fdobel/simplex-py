@@ -1,12 +1,13 @@
 import unittest
+
 from solver.optim import Optimization
 
 
 class Test(unittest.TestCase):
 
     def setUp(self):
-        from .factories import tableau_4
-        self.tableau = tableau_4().get()
+        from solver.helper.tableaus.read_from_files import builder_from_file
+        self.tableau = builder_from_file("__test__/program4.lp").get()
 
     def test_example4(self):
         result, sol = Optimization.max(self.tableau)

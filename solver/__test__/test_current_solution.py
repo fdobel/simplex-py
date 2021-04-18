@@ -17,6 +17,6 @@ class Test(unittest.TestCase):
 
     def test_example4(self):
         t = self.t3.get()
-        self.assertEqual(str(t.intermediate_solution()), "_s_1:18.0;_s_2:42.0;_s_3:24.0")
+        self.assertEqual(str(t.var_result()), "_s_1:18.0;_s_2:42.0;_s_3:24.0")
 
 

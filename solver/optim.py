@@ -118,7 +118,7 @@ class Optimization:
         val = PlainTableau(
             final_table, var_names=tableau.var_names,
             model_vars=tableau._model_vars, base_var_indices=final_base
-        ).collect_result()
+        ).var_result(only_model_vars=True)
 
         return val, final_table
 
@@ -137,6 +137,7 @@ class Optimization:
             max_ = table[-1, -1]
             return max_, res
 
+    """
     @classmethod
     def min(cls, tableau: PlainTableau, output='summary'):
         val, table = Optimization(tableau.convert_min()).run()
@@ -146,3 +147,4 @@ class Optimization:
         else:
             min_ = table[-1, -1] * -1
             return min_, _round_result(val._as_dict())
+    """

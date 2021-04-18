@@ -27,7 +27,7 @@ class Test(unittest.TestCase):
             model_vars=['x1', 'x2'],
             base_var_indices=res_base_indices
         )
-        vv = tabl.intermediate_solution()
+        vv = tabl.var_result()
 
         self.assertEqual(vv._as_dict(), {'_a_1': 0.5, 'x1': 1.0})
         # self.assertEqual(sol, {'x1': 1.0, 'x2': 1.0})

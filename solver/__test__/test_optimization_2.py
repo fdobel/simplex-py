@@ -1,5 +1,6 @@
 import unittest
 
+from solver.helper.tableaus.read_from_files import builder_from_file
 from solver.optim import Optimization
 from solver.simplex.solution import VariableValues
 
@@ -7,8 +8,7 @@ from solver.simplex.solution import VariableValues
 class Test(unittest.TestCase):
 
     def setUp(self):
-        from .factories import tableau_2
-        self.tableau = tableau_2().get()
+        self.tableau = builder_from_file("__test__/program2.lp").get()
 
     def test_max(self):
         result, sol = Optimization.max(self.tableau)
