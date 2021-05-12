@@ -1,8 +1,6 @@
 import unittest
 
 from constraint_description.variable_constraint import IsNaturalNumber
-from ..objective import Min
-from .. import GreaterEqualThan, LessEqualThan
 
 
 class Test(unittest.TestCase):

@@ -45,8 +45,18 @@ class ConstraintSet:
     def artificial_variables(self):
         return self.__type_variables("artificial")
 
+    @property
+    def variable_constraints(self):
+        return self._var_constraints
+
+    @property
+    def constraints(self):
+        return self._constraints
+
     def __str__(self):
         s = "\n".join("%s" % c for c in self._constraints)
+        for var_constr in self._var_constraints:
+            s  += "\n"  + str(var_constr)
         if PositiveVariables in self._conventions:
             s += "\n" + "all variables positive"
         return s
